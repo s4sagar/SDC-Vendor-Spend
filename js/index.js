@@ -79,6 +79,8 @@ var n = this,
 var step_back = function() {};
 
 function show_top_vendors_year(year) {
+    // Nijo Starts!
+    
     req = $.ajax({
         url: 'https://www.getvesseltracker.com/sdc_vendor_spend/get_top_vendors_by_year.php?year='+year,
         beforeSend: function() {
