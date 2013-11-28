@@ -77,10 +77,25 @@ var n = this,
  };
 
 var step_back = function() {};
+function show_more_filter(elem){
+    if($("#"+elem).closest('li').next('#filterDiv').length>0){
+    $("#filterDiv").slideUp('slow');    
+    $("#filterDiv").remove();
+    return false;
+    }
+    $("#filterDiv").hide('slow');
+    $("#filterDiv").remove();
+    var filterDiv="<div id='filterDiv' style='padding:10px 0px 10px 30px;display:none;-webkit-box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);'><table border='0' cellpadding='0' cellspacing='0'><tr><td>SDC</td><td>";
+    filterDiv+="<select><option value='option1'>Option 1</option><option value='option2'>Option 2</option><option value='option3'>Option 3</option></select>";
+    filterDiv+="</td></tr><tr><td>Owner</td><td><input type='text' style='width:200px'/></td></tr></table></div>";
+    $("#"+elem).closest('li').after(filterDiv);
+    $("#filterDiv").slideDown('slow');
+}
 
 function show_top_vendors_year(year) {
     // Nijo Starts!
-    
+      
+    return false;
     req = $.ajax({
         url: 'https://www.getvesseltracker.com/sdc_vendor_spend/get_top_vendors_by_year.php?year='+year,
         beforeSend: function() {
@@ -238,7 +253,8 @@ function show_sdc_screen(id) {
 function show_years() {
     var results_div = "<ul class='list'>";
     for(var i=0; i<3; i++) {
-        results_div += "<li><a href='javascript:show_top_vendors_year(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
+       // results_div += "<li><a href='javascript:show_top_vendors_year(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
+        results_div += "<li><a href='javascript:show_more_filter(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
         results_div += "<span class='chevron'></span>";
         results_div += "</a></li>";
     }
