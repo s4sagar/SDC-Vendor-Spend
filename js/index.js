@@ -79,17 +79,24 @@ var n = this,
 var step_back = function() {};
 function show_more_filter(elem){
     if($("#"+elem).closest('li').next('#filterDiv').length>0){
-    $("#filterDiv").slideUp('slow');    
-    $("#filterDiv").remove();
-    return false;
+        $("#filterDiv").slideToggle('slow');
+        return false;
+    }  
+    else if ($("#filterDiv").length>0)  {
+        $("#filterDiv").slideUp('slow', function(){ 
+            $("#filterDiv").insertAfter($("#"+elem).closest('li'));
+            $("#filterDiv").delay(300).slideDown("slow"); 
+        });
+        return false;
     }
-    $("#filterDiv").hide('slow');
-    $("#filterDiv").remove();
-    var filterDiv="<div id='filterDiv' style='padding:10px 0px 10px 30px;display:none;-webkit-box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);'><table border='0' cellpadding='0' cellspacing='0'><tr><td>SDC</td><td>";
+     $("#filterDiv").remove();
+    var filterDiv="<div id='filterDiv' style='display:none;-webkit-box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);'>";
+    filterDiv+="<div style='padding:10px 0px 10px 30px;'><table border='0' cellpadding='0' cellspacing='0'><tr><td>SDC</td><td>";
     filterDiv+="<select><option value='option1'>Option 1</option><option value='option2'>Option 2</option><option value='option3'>Option 3</option></select>";
-    filterDiv+="</td></tr><tr><td>Owner</td><td><input type='text' style='width:200px'/></td></tr></table></div>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td><input type='text' style='width:200px'/></td></tr>"
+    filterDiv+="<tr><td colspan='2' style='text-align:right'><input type='button' value='Filter' /></td></tr></table></div></div>";
     $("#"+elem).closest('li').after(filterDiv);
-    $("#filterDiv").slideDown('slow');
+    $("#filterDiv").slideDown("slow");
 }
 
 function show_top_vendors_year(year) {
