@@ -77,75 +77,24 @@ var n = this,
  };
 
 var step_back = function() {};
-
-// Nijo Starts!
-var sdcs = new Array('BSMBE', 'BSMCN', 'BSMCY', 'BSMDE', 'BSMGR', 'BSMHK', 'BSMIN', 'BSMIM', 'BSMPL', 'BSMJP', 'BSMSG', 'BSMUK', 'ALL');
-
 function show_more_filter(elem){
     if($("#"+elem).closest('li').next('#filterDiv').length>0){
-        $("#filterDiv").slideToggle('slow');
-        return false;
-    }  
-    else if ($("#filterDiv").length>0)  {
-        $("#filterDiv").slideUp(function(){             
-            $('#cmbSDC').val('ALL');
-            $("#filterDiv").insertAfter($("#"+elem).closest('li'));
-            $("#filterDiv").slideDown("slow"); 
-        });
-        return false;
+    $("#filterDiv").slideUp('slow');    
+    $("#filterDiv").remove();
+    return false;
     }
-    var filterDiv="<div id='filterDiv' style='display:none;-webkit-box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);'>";
-    filterDiv+="<div style='padding:10px 0px 10px 30px;'><table border='0' cellpadding='0' cellspacing='0'><tr><td>SDC</td><td>";
-    filterDiv+="<select id='cmbSDC'></select>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td><input id='txtOwner' type='text' style='width:200px'/></td></tr>";
-    filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='txtOwner' type='button' value='Filter' /></td></tr></table></div></div>";
+    $("#filterDiv").hide('slow');
+    $("#filterDiv").remove();
+    var filterDiv="<div id='filterDiv' style='padding:10px 0px 10px 30px;display:none;-webkit-box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);'><table border='0' cellpadding='0' cellspacing='0'><tr><td>SDC</td><td>";
+    filterDiv+="<select><option value='option1'>Option 1</option><option value='option2'>Option 2</option><option value='option3'>Option 3</option></select>";
+    filterDiv+="</td></tr><tr><td>Owner</td><td><input type='text' style='width:200px'/></td></tr></table></div>";
     $("#"+elem).closest('li').after(filterDiv);
-
-    // Fill SDC dropdown
-    var SDCoption = '';
-    for (i=0;i<sdcs.length;i++){
-       SDCoption += '<option value="'+ sdcs[i] + '">' + sdcs[i] + '</option>';
-    }
-    $('#cmbSDC').append(SDCoption);
-    $('#cmbSDC').val('ALL');
-
-    // Fill Owner AutoComplete
-    var availableTags = [
-      {"ID":366,"label":"Administradora De Naves Humboldt Ltda."},
-      {"ID":1164,"label":"Tankers Limited"},
-      {"ID":206,"label":"Anthony Veder Rederijzaken BV"},
-      {"ID":1119,"label":"Shipping Limited"}
-    ];
-   $.ajax({
-      url: "https://www.getvesseltracker.com/get_owner_list.php?year=2013&&companycode=bsmcy",
-      datatype: 'json',
-      success: function(data){              
-        alert('success');
-             $("#txtOwner").autocomplete({
-                          source: data,
-                          minLength: 1,
-                          matchFromStart: false,
-                          messages: {
-                                noResults: '',
-                                results: function() {}
-                          },
-                          select: function( event, ui ) {
-                            alert( ui.item.ID);
-                          }
-                    });
-      },
-     error: function() {        
-        alert('error');
-    } 
-    }); 
-
-
-
-    $("#filterDiv").slideDown("slow");
+    $("#filterDiv").slideDown('slow');
 }
-// Nijo Ends!
 
-function show_top_vendors_year(year) {      
+function show_top_vendors_year(year) {
+    // Nijo Starts!
+      
     return false;
     req = $.ajax({
         url: 'https://www.getvesseltracker.com/sdc_vendor_spend/get_top_vendors_by_year.php?year='+year,
