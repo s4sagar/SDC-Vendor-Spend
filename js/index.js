@@ -52,8 +52,8 @@ var app = {
 };
 
 function toTitleCase(str)
-{
-  return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+{ if(str)
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 
 jQuery.fn.center = function () {
@@ -84,7 +84,6 @@ var n = this,
     $('#view_title').hide();
     $('.txtVendor').hide();
     $('.inset').hide();
-
  }
 
 var step_back = function() {};
@@ -189,7 +188,7 @@ function show_top_vendors_by_turnover(year) {
 
 function show_top_invoices_by_vendor_year(vendor_id, year) {
     req = $.ajax({
-        url: 'https://www.getvesseltracker.com/sdc_vendor_spend/get_top_invoices_by_vendor_year.php?VendorID='+vendor_id+'&year='+year,
+        url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_top_invoices_by_vendor_year.php?VendorID='+vendor_id+'&year='+year,
         beforeSend: function() {
             $(".spinner_index").css('display','inline');
             $(".spinner_index").center();
@@ -293,18 +292,6 @@ function show_vendor_invoices(vendor_name, sdc) {
     });
 }
 
-https://www.getvesseltracker.com/sdc_vendor_spend/get_vendor_invoices.php?sdc=BSMCN&vendor_name=AAGE%20HEMPEL%20AS
-
-function show_sdc_screen(id) {
-    $('#index_content').hide();
-    $('#vendor_classification').show();
-    $('#back_button').css('display','inline-block');
-    step_back = function(){
-        $('#vendor_classification').hide();
-        $('#back_button').css('display','none');
-        $('#index_content').show();
-    };
-}
 
 var owners_array;
 var selected_owner_id;
@@ -341,8 +328,6 @@ function show_more_filter(year) {
     var availableTags = [
       {"ID":366,"label":"Administradora De Naves Humboldt Ltda."},
       {"ID":1164,"label":"Tankers Limited"},
-      {"ID":206,"label":"Anthony Veder Rederijzaken BV"},
-      {"ID":1119,"label":"Shipping Limited"}
     ];
     $("#txtOwner").autocomplete({
         source: owners_array,
@@ -360,22 +345,7 @@ function show_more_filter(year) {
 }
 
 function show_years() {
-    hide_all();
-    var results_div = "<ul class='list'>";
-    for(var i=0; i<3; i++) {
-       // results_div += "<li><a href='javascript:show_top_vendors_by_turnover(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
-        results_div += "<li><a href='javascript:show_more_filter(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
-        results_div += "<span class='chevron'></span>";
-        results_div += "</a></li>";
-    }
-    results_div += "</ul>";    
-    $('.spinner_index').hide();
-    $('#vendor_classification').hide();
-    $('#back_button').css('display','none');
-    $('#index_content').show();
-    $('#view_title').show();
-    $('#view_title').html('Please select a year.');
-    $('#index_content').html(results_div);
+    // hide_all();
     $.ajax({
       url: "https://www.getvesseltracker.com/get_owner_list.php",
       datatype: 'json',
@@ -386,11 +356,26 @@ function show_years() {
       success: function(data){
         owners_array = data;
         $('.spinner_index').hide();
+        var results_div = "<ul class='list'>";
+        for(var i=0; i<3; i++) {
+           // results_div += "<li><a href='javascript:show_top_vendors_by_turnover(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
+            results_div += "<li><a href='javascript:show_more_filter(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
+            results_div += "<span class='chevron'></span>";
+            results_div += "</a></li>";
+        }
+        results_div += "</ul>";    
+        $('.spinner_index').hide();
+        $('#vendor_classification').hide();
+        $('#back_button').css('display','none');
+        $('#index_content').show();
+        $('#view_title').show();
+        $('#view_title').html('Please select a year.');
+        $('#index_content').html(results_div);
       },
      error: function() {        
         alert('Please try again in a minute.');
         $('.spinner_index').hide();
-    } 
+     } 
     });
 }
 

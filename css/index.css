@@ -175,4 +175,9 @@ h1 {
     font-weight: bold;
     padding: 10px;
     text-transform: capitalize;
+    margin-top: 50px;
+}
+
+.txtVendor {
+    margin-top: 50px;
 }
