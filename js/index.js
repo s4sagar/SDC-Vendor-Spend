@@ -40,12 +40,12 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        // var parentElement = document.getElementById(id);
-        // var listeningElement = parentElement.querySelector('.listening');
-        // var receivedElement = parentElement.querySelector('.received');
+        // var parentyearent = document.getyearentById(id);
+        // var listeningyearent = parentyearent.querySelector('.listening');
+        // var receivedyearent = parentyearent.querySelector('.received');
 
-        // listeningElement.setAttribute('style', 'display:none;');
-        // receivedElement.setAttribute('style', 'display:block;');
+        // listeningyearent.setAttribute('style', 'display:none;');
+        // receivedyearent.setAttribute('style', 'display:block;');
 
         // console.log('Received Event: ' + id);
     }
@@ -76,79 +76,28 @@ var n = this,
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
  };
 
+ function hide_all() {
+    $('.spinner_index').hide();
+    $('#index_content').hide();
+    $('#vendor_categories').hide();
+    $('#vendor_classification').hide();
+    $('#view_title').hide();
+    $('.txtVendor').hide();
+    $('.inset').hide();
+
+ }
+
 var step_back = function() {};
 
 // Nijo Starts!
 var sdcs = new Array('BSMBE', 'BSMCN', 'BSMCY', 'BSMDE', 'BSMGR', 'BSMHK', 'BSMIN', 'BSMIM', 'BSMPL', 'BSMJP', 'BSMSG', 'BSMUK', 'ALL');
 
-function show_more_filter(elem){
-    if($("#"+elem).closest('li').next('#filterDiv').length>0){
-        $("#filterDiv").slideToggle('slow');
-        return false;
-    }  
-    else if ($("#filterDiv").length>0)  {
-        $("#filterDiv").slideUp(function(){             
-            $('#cmbSDC').val('ALL');
-            $("#filterDiv").insertAfter($("#"+elem).closest('li'));
-            $("#filterDiv").slideDown("slow"); 
-        });
-        return false;
-    }
-    var filterDiv="<div id='filterDiv' style='display:none;-webkit-box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);'>";
-    filterDiv+="<div style='padding:10px 0px 10px 30px;'><table border='0' cellpadding='0' cellspacing='0'><tr><td>SDC</td><td>";
-    filterDiv+="<select id='cmbSDC'></select>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td><input id='txtOwner' type='text' style='width:200px'/></td></tr>";
-    filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='txtOwner' type='button' value='Filter' /></td></tr></table></div></div>";
-    $("#"+elem).closest('li').after(filterDiv);
-
-    // Fill SDC dropdown
-    var SDCoption = '';
-    for (i=0;i<sdcs.length;i++){
-       SDCoption += '<option value="'+ sdcs[i] + '">' + sdcs[i] + '</option>';
-    }
-    $('#cmbSDC').append(SDCoption);
-    $('#cmbSDC').val('ALL');
-
-    // Fill Owner AutoComplete
-    var availableTags = [
-      {"ID":366,"label":"Administradora De Naves Humboldt Ltda."},
-      {"ID":1164,"label":"Tankers Limited"},
-      {"ID":206,"label":"Anthony Veder Rederijzaken BV"},
-      {"ID":1119,"label":"Shipping Limited"}
-    ];
-   $.ajax({
-      url: "https://www.getvesseltracker.com/get_owner_list.php?year=2013&&companycode=bsmcy",
-      datatype: 'json',
-      success: function(data){              
-        alert('success');
-             $("#txtOwner").autocomplete({
-                          source: data,
-                          minLength: 1,
-                          matchFromStart: false,
-                          messages: {
-                                noResults: '',
-                                results: function() {}
-                          },
-                          select: function( event, ui ) {
-                            alert( ui.item.ID);
-                          }
-                    });
-      },
-     error: function() {        
-        alert('error');
-    } 
-    }); 
-
-
-
-    $("#filterDiv").slideDown("slow");
-}
-// Nijo Ends!
-
-function show_top_vendors_year(year) {      
-    return false;
+function show_top_vendors_by_turnover(year) {
+    var owner = selected_owner_id;
+    var sdc = $('#cmbSDC').val();
+    
     req = $.ajax({
-        url: 'https://www.getvesseltracker.com/sdc_vendor_spend/get_top_vendors_by_year.php?year='+year,
+        url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_top_vendors.php?year='+year+'&sdcCode='+sdc+'&ownerid='+owner,
         beforeSend: function() {
             $(".spinner_index").css('display','block');
             $(".spinner_index").center();
@@ -157,26 +106,83 @@ function show_top_vendors_year(year) {
         success : function(response) {
             // var results = JSON.parse(response);
             var results = response;
-            var results_div = "<ul class='list'>";
+
+            var results_div_con = "<div><ul class='list'>";
+            var results_div_app = "<div><ul class='list'>";
+            var results_div = "<div><ul class='list'>";
+            var con_count = 0;
+            var app_count = 0;
+            var else_count = 0;
+            var vendor_array = new Array();
             for(var i=0; i<results.length; i++) {
-                results_div += "<li><a href='javascript:show_top_invoices_by_vendor_year("+results[i]['vendor_id']+", "+year+")' id='"+results[i]['vendor_id']+"'> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
-                // results_div += "<span class='chevron my-chevron'></span>";
-                results_div += "<span class='my-count'>USD "+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(2, '.', ',')+"</a></span></li>";
+                var temp = new Array;
+                temp.id = results[i]['vendor_id'];
+                temp.label = results[i]['NAME'];
+                temp.amount = results[i]['INVOICE_AMOUNT_USD'];
+                vendor_array.push(temp);
+                if(results[i]['APPROVAL_STATUS'] == "CONTRACTED"){
+                    if(con_count >= 50) continue;
+                    results_div_con += "<li><a href='javascript:show_top_invoices_by_vendor_year("+results[i]['vendor_id']+", "+year+")' id='"+results[i]['vendor_id']+"'> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
+                    // results_div += "<span class='chevron my-chevron'></span>";
+                    results_div_con += "<span class='my-count'>USD "+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(2, '.', ',')+"</a></span></li>";
+                    con_count++;
+                }
+                else if(results[i]['APPROVAL_STATUS'] == "APPROVED"){
+                    if(app_count >= 50) continue;
+                    results_div_app += "<li><a href='javascript:show_top_invoices_by_vendor_year("+results[i]['vendor_id']+", "+year+")' id='"+results[i]['vendor_id']+"'> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
+                    // results_div += "<span class='chevron my-chevron'></span>";
+                    results_div_app += "<span class='my-count'>USD "+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(2, '.', ',')+"</a></span></li>";
+                    app_count++;
+                }
+                else {
+                    if(else_count >= 50) continue;
+                    results_div += "<li><a href='javascript:show_top_invoices_by_vendor_year("+results[i]['vendor_id']+", "+year+")' id='"+results[i]['vendor_id']+"'> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
+                    // results_div += "<span class='chevron my-chevron'></span>";
+                    results_div += "<span class='my-count'>USD "+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(2, '.', ',')+"</a></span></li>";
+                    else_count++;
+                }
             }
-            results_div += "</ul>";
+            results_div_con += "</ul></div>";
+            results_div_app += "</ul></div>";
+            results_div += "</ul></div>";
             $('.spinner_index').hide();
             $('#index_content').hide();
             $('#vendor_categories').show();
             $('#vendor_classification').show();
-            $('#contracted').html(results_div);
-            $('#approved').html(results_div);
+            $('#contracted').html(results_div_con);
+            $('#approved').html(results_div_app);
             $('#adhoc').html(results_div);
             $('#back_button').css('display','inline-block');
             $('#view_title').show();
-            $('#view_title').html('Highest Turnover Vendors in ' + year);
+            var title_text = 'Highest Turnover Vendors in ' + year;
+            if (sdc) title_text += ' and ' + sdc + ' SDC';
+            if (owner) title_text += ' for the owner ' + owner;
+            $('#view_title').html( title_text);
             // $('#index_content').show();
             // $('#index_content').html(results_div);
             step_back = show_years;
+
+            $(".txtVendor").autocomplete({
+                source: vendor_array,
+                minLength: 1,
+                matchFromStart: false,
+                messages: {
+                    noResults: '',
+                    results: function() {}
+                },
+                select: function( event, ui ) {
+                    var searched_vendor = "<div><ul class='list'>";
+                    
+                    searched_vendor += "<li><a href='javascript:show_top_invoices_by_vendor_year("+ui.item.id+", "+year+")' id='"+ui.item.id+"'> <span class='list_text'>"+toTitleCase(ui.item.label)+"</span>";
+                    // results_div += "<span class='chevron my-chevron'></span>";
+                    searched_vendor += "<span class='my-count'>USD "+parseFloat(ui.item.amount).formatMoney(2, '.', ',')+"</a></span></li>";                   
+                    
+                    searched_vendor += "</ul></div>";
+                    if($('#contracted').hasClass('active') == true) $('#contracted').html(searched_vendor);
+                    if($('#approved').hasClass('active') == true) $('#approved').html(searched_vendor);
+                    if($('#adhoc').hasClass('active') == true) $('#adhoc').html(searched_vendor);
+                }
+            });
         }
     });
 }
@@ -188,7 +194,6 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
             $(".spinner_index").css('display','inline');
             $(".spinner_index").center();
         },
-      
         success : function(results) {
             // var results = JSON.parse(response);
             var results_div = "<ul class='list'>";
@@ -231,7 +236,7 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
             
             $('#back_button').css('display','inline-block');
             step_back = function(){
-                show_top_vendors_year(year);
+                show_top_vendors_by_turnover(year);
             };
 
         }
@@ -301,15 +306,69 @@ function show_sdc_screen(id) {
     };
 }
 
+var owners_array;
+var selected_owner_id;
+
+function show_more_filter(year) {
+    if($("#"+year).closest('li').next('#filterDiv').length>0){
+        $("#filterDiv").slideToggle('slow');
+        return false;
+    }  
+    else if ($("#filterDiv").length>0)  {
+        $("#filterDiv").slideUp(function(){             
+            $('#cmbSDC').val('ALL');
+            $("#filterDiv").insertAfter($("#"+year).closest('li'));
+            $("#filterDiv").slideDown("slow"); 
+        });
+        return false;
+    }
+    var filterDiv="<div id='filterDiv' style='display:none;-webkit-box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);'>";
+    filterDiv+="<div style='padding:10px 0px 10px 30px;'><table border='0' cellpadding='0' cellspacing='0'><tr><td>SDC</td><td>";
+    filterDiv+="<select id='cmbSDC'></select>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td><input id='txtOwner' type='text' style='width:200px'/></td></tr>";
+    filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='txtOwner' type='button' value='Show' onClick='show_top_vendors_by_turnover("+year+")' /></td></tr></table></div></div>";
+    $("#"+year).closest('li').after(filterDiv);
+
+    // Fill SDC dropdown
+    var SDCoption = '';
+    for (i=0;i<sdcs.length;i++){
+       SDCoption += '<option value="'+ sdcs[i] + '">' + sdcs[i] + '</option>';
+    }
+    $('#cmbSDC').append(SDCoption);
+    $('#cmbSDC').val('ALL');
+
+    // Fill Owner AutoComplete
+    var availableTags = [
+      {"ID":366,"label":"Administradora De Naves Humboldt Ltda."},
+      {"ID":1164,"label":"Tankers Limited"},
+      {"ID":206,"label":"Anthony Veder Rederijzaken BV"},
+      {"ID":1119,"label":"Shipping Limited"}
+    ];
+    $("#txtOwner").autocomplete({
+        source: owners_array,
+        minLength: 1,
+        matchFromStart: false,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        select: function( event, ui ) {
+        selected_owner_id = ui.item.ID;
+        }
+    });
+    $("#filterDiv").slideDown("slow");
+}
+
 function show_years() {
+    hide_all();
     var results_div = "<ul class='list'>";
     for(var i=0; i<3; i++) {
-       // results_div += "<li><a href='javascript:show_top_vendors_year(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
+       // results_div += "<li><a href='javascript:show_top_vendors_by_turnover(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
         results_div += "<li><a href='javascript:show_more_filter(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
         results_div += "<span class='chevron'></span>";
         results_div += "</a></li>";
     }
-    results_div += "</ul>";
+    results_div += "</ul>";    
     $('.spinner_index').hide();
     $('#vendor_classification').hide();
     $('#back_button').css('display','none');
@@ -317,6 +376,22 @@ function show_years() {
     $('#view_title').show();
     $('#view_title').html('Please select a year.');
     $('#index_content').html(results_div);
+    $.ajax({
+      url: "https://www.getvesseltracker.com/get_owner_list.php",
+      datatype: 'json',
+      beforeSend: function() {
+        $(".spinner_index").css('display','block');
+        $(".spinner_index").center();
+      },
+      success: function(data){
+        owners_array = data;
+        $('.spinner_index').hide();
+      },
+     error: function() {        
+        alert('Please try again in a minute.');
+        $('.spinner_index').hide();
+    } 
+    });
 }
 
 show_years();
