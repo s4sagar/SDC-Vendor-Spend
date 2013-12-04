@@ -92,6 +92,7 @@ var step_back = function() {};
 var sdcs = new Array('BSMBE', 'BSMCN', 'BSMCY', 'BSMDE', 'BSMGR', 'BSMHK', 'BSMIN', 'BSMIM', 'BSMPL', 'BSMJP', 'BSMSG', 'BSMUK', 'ALL');
 
 function show_top_vendors_by_turnover(year) {
+    hide_all();
     var owner = selected_owner_id;
     var sdc = $('#cmbSDC').val();
     
@@ -153,6 +154,9 @@ function show_top_vendors_by_turnover(year) {
             $('#adhoc').html(results_div);
             $('#back_button').css('display','inline-block');
             $('#view_title').show();
+            $('.txtVendor').show();
+            $('.inset').show();
+            $('.list').show();
             var title_text = 'Highest Turnover Vendors in ' + year;
             if (sdc) title_text += ' and ' + sdc + ' SDC';
             if (owner) title_text += ' for the owner ' + owner;
@@ -172,7 +176,7 @@ function show_top_vendors_by_turnover(year) {
                 select: function( event, ui ) {
                     var searched_vendor = "<div><ul class='list'>";
                     
-                    searched_vendor += "<li><a href='javascript:show_top_invoices_by_vendor_year("+ui.item.id+", "+year+")' id='"+ui.item.id+"'> <span class='list_text'>"+toTitleCase(ui.item.label)+"</span>";
+                    searched_vendor += "<li><a href='javascript:show_top_invoices_by_vendor_year(" + ui.item.id + ", " + year + ")' id='" + ui.item.id + "'> <span class='list_text'>" + toTitleCase(ui.item.label) + "</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
                     searched_vendor += "<span class='my-count'>USD "+parseFloat(ui.item.amount).formatMoney(2, '.', ',')+"</a></span></li>";                   
                     
@@ -187,6 +191,7 @@ function show_top_vendors_by_turnover(year) {
 }
 
 function show_top_invoices_by_vendor_year(vendor_id, year) {
+    hide_all();
     req = $.ajax({
         url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_top_invoices_by_vendor_year.php?VendorID='+vendor_id+'&year='+year,
         beforeSend: function() {
@@ -203,7 +208,10 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
                 if (results[i]['TITLE'])
                     results_div += "<div class='sub_text vessel_name'> <span class='details_title'><b>" + toTitleCase(results[i]['TITLE']) + "</b></span></div>"
                 // results_div += "<div class='sub_text vessel_name'> <span class='details_title'>Vendor: </span><b>" + toTitleCase(results[i]['vendor_name']) + "</b></div>";
-                results_div += "<div class='sub_text vessel_name'> <span class='details_title'>Vessel: </span><b>" + toTitleCase(results[i]['Vessel_name']) + "</b></div>";
+                console.log(results[i]['Vessel_name']);
+                if(results[i]['Vessel_name'])
+                    results_div += "<div class='sub_text vessel_name'> <span class='details_title'>Vessel: </span><b>" + toTitleCase(results[i]['Vessel_name']) + "</b></div>";
+                
                 results_div += "<div class='sub_text invoice_no'> <span class='details_title'>Invoice No: </span><b>" + toTitleCase(results[i]['VENDOR_INVOICE_NO']) + "</b></div></span>";
                 results_div += "<div class='sub_text invoice_register_date'> <span class='details_title'>Registration Date: </span><b>" + results[i]['REGISTRATION_DATE'].split('T',1)[0] + "</b></div></span>";
                 results_div += "<div class='sub_text invoice_paid_date'> <span class='details_title'>Pay Due Date: </span><b>" + results[i]['PAY_DUE_DATE'].split('T',1)[0] + "</b></div></span>";
@@ -226,7 +234,11 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
             
             // $('#vendor_categories').show();
             $('#vendor_classification').show();
-            $('#contracted').html(results_div);
+            // $('#contracted').html(results_div);
+
+            if($('#contracted').hasClass('active')) $('#contracted').html(results_div);
+            if($('#approved').hasClass('active')) $('#approved').html(results_div);
+            if($('#adhoc').hasClass('active')) $('#adhoc').html(results_div);
             // $('#approved').html(results_div);
             // $('#adhoc').html(results_div);
             $('#view_title').html('Highest Invoices of ' + vendor_name + ' In ' + year);
@@ -237,6 +249,17 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
             step_back = function(){
                 show_top_vendors_by_turnover(year);
             };
+
+            $('html, .app').animate({ scrollTop: 0 }, 600);
+
+            
+            $('#vendor_categories').show();
+            $('#vendor_classification').show();
+            $('#back_button').css('display','inline-block');
+            $('#view_title').show();
+            $('.txtVendor').show();
+            $('.inset').show();
+            $('.list').show();
 
         }
     });
@@ -345,7 +368,7 @@ function show_more_filter(year) {
 }
 
 function show_years() {
-    // hide_all();
+    hide_all();
     $.ajax({
       url: "https://www.getvesseltracker.com/get_owner_list.php",
       datatype: 'json',
