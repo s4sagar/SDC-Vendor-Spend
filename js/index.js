@@ -367,9 +367,10 @@ function show_more_filter(year) {
     var filterDiv="<div id='filterDiv' data-role='content' style='display:none;-webkit-box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);'>";
     filterDiv+="<div style='padding:10px 0px 10px 30px;'><table border='0' cellpadding='0' cellspacing='0'><tr><td>SDC</td><td>";
     filterDiv+="<select id='cmbSDC'></select>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td><input id='txtOwner' name='search' type='search' class='search-textbox' placeholder='Search for an Owner' /></td></tr>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Vessel</td><td><input id='txtVesselFilter' type='search' class='search-textbox' placeholder='Search for a Vessel' /></td></tr>";
-    filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='txtOwner' type='button' value='Show' onClick='show_top_vendors_by_turnover("+year+")' /></td></tr></table></div></div>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td><div><input id='txtOwner' name='search' type='text' data-type='search' class='search-textbox' placeholder='Search for an Owner' /></div></td></tr>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Vessel</td><td><div><input id='txtVesselFilter' type='search' class='search-textbox' placeholder='Search for a Vessel' /></div></td></tr>";
+    filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='btnShow' type='button' value='Show' onClick='show_top_vendors_by_turnover("+year+")' /></td></tr></table></div></div>";
+
     $("#"+year).closest('li').after(filterDiv);
 
     $('#search-textbox').textinput();
@@ -417,6 +418,7 @@ function show_more_filter(year) {
 
 function show_years() {
     hide_all();
+    $('#filterDiv').hide();
     $.ajax({
       url: "https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_vessel_list_filter.php",      
       datatype: 'json',
@@ -439,7 +441,6 @@ function show_years() {
 
         // console.log(results_div);
         $('.spinner_index').hide();
-        $('#btnBack').show();
         // $('#vendor_classification').hide();
         // $('#back_button').css('display','none');
         $('#index_content').show();
