@@ -95,11 +95,16 @@ var n = this,
 
 var step_back = function() {};
 
+var current_step = function() {};
+
 // Nijo Starts!
 var sdcs = new Array('BSMBE', 'BSMCN', 'BSMCY', 'BSMDE', 'BSMGR', 'BSMHK', 'BSMIN', 'BSMIM', 'BSMPL', 'BSMJP', 'BSMSG', 'BSMUK', 'ALL');
 
 function show_top_vendors_by_turnover(year) {
     hide_all();
+    current_step = function(){
+                show_top_vendors_by_turnover(year);
+            };
     var owner = selected_owner_id;
     var vessel = selected_vessel_id;
     var sdc = $('#cmbSDC').val();
@@ -157,16 +162,12 @@ function show_top_vendors_by_turnover(year) {
             $('#index_content').hide();
             $('#btnBack').show();
             $('#navbar').show();
-            $('#vendor_categories').show();
-            $('#vendor_classification').show();
             $('#contracted').html(results_div_con);
             $('#approved').html(results_div_app);
             $('#adhoc').html(results_div);
             $('#back_button').css('display','inline-block');
             $('#view_title').show();
             $('#searchbox').show();
-            $('.inset').show();
-            $('.list').show();
             var title_text = 'Highest Turnover Vendors in ' + year;
             if (sdc) title_text += ' and ' + sdc + ' SDC';
             if (owner) title_text += ' for the owner ' + owner;
@@ -176,7 +177,7 @@ function show_top_vendors_by_turnover(year) {
             // $('#index_content').html(results_div);
             step_back = show_years;
 
-            console.log(results_div_con);
+            // console.log(results_div_con);
 
             $('.listview').listview();
             $('#n_contracted').click();
@@ -211,6 +212,10 @@ function show_top_vendors_by_turnover(year) {
 
 function show_top_invoices_by_vendor_year(vendor_id, year) {
     hide_all();
+
+    current_step = function(){
+                show_top_invoices_by_vendor_year(vendor_id, year);
+            };
     var sdc = $('#cmbSDC').val();
     req = $.ajax({
         url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_top_invoices_by_vendor_year.php?VendorID='+vendor_id+'&year='+year,
@@ -254,7 +259,6 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
             
             // $('#vendor_categories').show();
             $('#btnBack').show();
-            $('#vendor_classification').show();
             // $('#contracted').html(results_div);
 
             $('#vendor-invoices').html(results_div);
@@ -275,16 +279,12 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
             
             $('#view_title').html(title_text);            
             
-            $('#back_button').css('display','inline-block');
             step_back = function(){
                 show_top_vendors_by_turnover(year);
             };
 
             $('html, .app').animate({ scrollTop: 0 }, 600);
 
-            
-            $('#vendor_categories').show();
-            $('#vendor_classification').show();
             $('#back_button').css('display','inline-block');
             $('#view_title').show();
             $('.txtVendor').show();
@@ -383,11 +383,6 @@ function show_more_filter(year) {
     $('#cmbSDC').append(SDCoption);
     $('#cmbSDC').val('ALL');
 
-    // Fill Owner AutoComplete
-    var availableTags = [
-      {"ID":366,"label":"Administradora De Naves Humboldt Ltda."},
-      {"ID":1164,"label":"Tankers Limited"},
-    ];
     $("#txtOwner").autocomplete({
         source: owners_array,
         minLength: 1,
@@ -418,7 +413,7 @@ function show_more_filter(year) {
 
 function show_years() {
     hide_all();
-    $('#filterDiv').hide();
+    current_step = show_years;
     $.ajax({
       url: "https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_vessel_list_filter.php",      
       datatype: 'json',

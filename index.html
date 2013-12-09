@@ -28,11 +28,11 @@
 <!-- Home -->
 <div data-role="page" id="page1">
     <div data-theme="a" data-role="header">
-        <a data-role="button" href="#" data-icon="refresh" data-iconpos="left"
-        class="ui-btn-right">
-        </a>
-        <a data-role="button" href="#" data-icon="refresh" data-iconpos="left"
-        class="ui-btn-right">
+        <!-- <a data-role="button" href="#" data-icon="refresh" data-iconpos="left"
+        class="ui-btn-right">Refersh
+        </a> -->
+        <a data-role="button" href="javascript:current_step();" data-icon="refresh" data-iconpos="left"
+        class="ui-btn-right">Refersh
         </a>
         <a id="btnBack" data-role="button" data-icon="arrow-l" data-iconpos="left"
         class="ui-btn-left" href="javascript:step_back();">
@@ -74,8 +74,6 @@
         <div id='adhoc' class="my-navbar-content"></div>
         <div id='vendor-invoices' class="my-navbar-content"></div>
         <div id='searched-vendor' class="my-navbar-content"></div>
-
-        <div id="filterDiv" data-role="content" style="-webkit-box-shadow: rgba(0, 0, 0, 0.298039) 0px -2px 10px 1px inset; box-shadow: rgba(0, 0, 0, 0.298039) 0px -2px 10px 1px inset;"><div style="padding:10px 0px 10px 30px;"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td>SDC</td><td><select id="cmbSDC"><option value="BSMBE">BSMBE</option><option value="BSMCN">BSMCN</option><option value="BSMCY">BSMCY</option><option value="BSMDE">BSMDE</option><option value="BSMGR">BSMGR</option><option value="BSMHK">BSMHK</option><option value="BSMIN">BSMIN</option><option value="BSMIM">BSMIM</option><option value="BSMPL">BSMPL</option><option value="BSMJP">BSMJP</option><option value="BSMSG">BSMSG</option><option value="BSMUK">BSMUK</option><option value="ALL">ALL</option></select></td></tr><tr><td style="padding-right:5px">Owner</td><td><div><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span><input id="txtOwner" name="search" type="text" data-type="search" class="search-textbox ui-autocomplete-input" placeholder="Search for an Owner" autocomplete="off"></div></td></tr><tr><td style="padding-right:5px">Vessel</td><td><div><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span><input id="txtVesselFilter" type="search" class="search-textbox ui-autocomplete-input" placeholder="Search for a Vessel" autocomplete="off"></div></td></tr><tr><td colspan="2" style="text-align:right"><input id="btnShow" type="button" value="Show" onclick="show_top_vendors_by_turnover(2013)"></td></tr></tbody></table></div></div>
     </div>
     <div class='spinner_index'>
       <img src="img/spinner.gif" width="20px" height="20px" style="display:block;margin:auto;"/>
