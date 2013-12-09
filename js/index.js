@@ -86,6 +86,11 @@ var n = this,
     $('#view_title').hide();
     $('#searchbox').hide();
     $('.inset').hide();
+    $('#vendor-invoices').hide();
+    $('#contracted').hide();
+    $('#approved').hide();
+    $('#adhoc').hide();
+    $('#searched-vendor').hide();
  }
 
 var step_back = function() {};
@@ -110,9 +115,9 @@ function show_top_vendors_by_turnover(year) {
             // var results = JSON.parse(response);
             var results = response;
 
-            var results_div_con = "<ul data-role='listview' data-divider-theme='b' data-inset='true' id='listview'>";
-            var results_div_app = "<ul data-role='listview' data-divider-theme='b' data-inset='true' id='listview'>";
-            var results_div = "<ul data-role='listview' data-divider-theme='b' data-inset='true' id='listview'>";
+            var results_div_con = "<ul data-role='listview' data-divider-theme='b' data-inset='true' class='listview'>";
+            var results_div_app = "<ul data-role='listview' data-divider-theme='b' data-inset='true' class='listview'>";
+            var results_div = "<ul data-role='listview' data-divider-theme='b' data-inset='true' class='listview'>";
             var con_count = 0;
             var app_count = 0;
             var else_count = 0;
@@ -150,6 +155,7 @@ function show_top_vendors_by_turnover(year) {
             results_div += "</ul>";
             $('.spinner_index').hide();
             $('#index_content').hide();
+            $('#btnBack').show();
             $('#navbar').show();
             $('#vendor_categories').show();
             $('#vendor_classification').show();
@@ -158,12 +164,13 @@ function show_top_vendors_by_turnover(year) {
             $('#adhoc').html(results_div);
             $('#back_button').css('display','inline-block');
             $('#view_title').show();
-            $('.txtVendor').show();
+            $('#searchbox').show();
             $('.inset').show();
             $('.list').show();
             var title_text = 'Highest Turnover Vendors in ' + year;
             if (sdc) title_text += ' and ' + sdc + ' SDC';
             if (owner) title_text += ' for the owner ' + owner;
+            if (vessel) title_text += ' for vessel ' + selected_vessel_name;
             $('#view_title').html( title_text);
             // $('#index_content').show();
             // $('#index_content').html(results_div);
@@ -171,7 +178,8 @@ function show_top_vendors_by_turnover(year) {
 
             console.log(results_div_con);
 
-            $('#listview').listview();
+            $('.listview').listview();
+            $('#n_contracted').click();
 
             $(".txtVendor").autocomplete({
                 source: vendor_array,
@@ -182,16 +190,19 @@ function show_top_vendors_by_turnover(year) {
                     results: function() {}
                 },
                 select: function( event, ui ) {
-                    var searched_vendor = "<div><ul class='list'>";
+                    var searched_vendor = "<div><ul data-role='listview' data-divider-theme='b' data-inset='true' class='listview'>";
                     
-                    searched_vendor += "<li><a href='javascript:show_top_invoices_by_vendor_year(" + ui.item.id + ", " + year + ")' id='" + ui.item.id + "'> <span class='list_text'>" + toTitleCase(ui.item.label) + "</span>";
+                    searched_vendor += "<li data-theme='c'><a href='javascript:show_top_invoices_by_vendor_year(" + ui.item.id + ", " + year + ")' id='" + ui.item.id + "'> <span class='list_text'>" + toTitleCase(ui.item.label) + "</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
                     searched_vendor += "<span class='my-count'>USD "+parseFloat(ui.item.amount).formatMoney(2, '.', ',')+"</a></span></li>";                   
                     
                     searched_vendor += "</ul></div>";
-                    if($('#contracted').hasClass('active') == true) $('#contracted').html(searched_vendor);
-                    if($('#approved').hasClass('active') == true) $('#approved').html(searched_vendor);
-                    if($('#adhoc').hasClass('active') == true) $('#adhoc').html(searched_vendor);
+                    $('#contracted').hide();
+                    $('#approved').hide();
+                    $('#adhoc').hide();
+                    $('#searched-vendor').show();
+                    $('#searched-vendor').html(searched_vendor);
+                    $('.listview').listview();
                 }
             });
         }
@@ -200,6 +211,7 @@ function show_top_vendors_by_turnover(year) {
 
 function show_top_invoices_by_vendor_year(vendor_id, year) {
     hide_all();
+    var sdc = $('#cmbSDC').val();
     req = $.ajax({
         url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_top_invoices_by_vendor_year.php?VendorID='+vendor_id+'&year='+year,
         beforeSend: function() {
@@ -208,11 +220,11 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
         },
         success : function(results) {
             // var results = JSON.parse(response);
-            var results_div = "<ul class='list'>";
+            var results_div = "<ul data-role='listview' data-divider-theme='b' data-inset='true' class='listview'>";
             var vendor_name;
             for(var i=0; i<results.length; i++) {
                 vendor_name = toTitleCase(results[i]['vendor_name']);
-                results_div += "<li><span class='list_text'>";
+                results_div += "<li data-theme='c'><span class='list_text'>";
                 if (results[i]['TITLE'])
                     results_div += "<div class='sub_text vessel_name'> <span class='details_title'><b>" + toTitleCase(results[i]['TITLE']) + "</b></span></div>"
                 // results_div += "<div class='sub_text vessel_name'> <span class='details_title'>Vendor: </span><b>" + toTitleCase(results[i]['vendor_name']) + "</b></div>";
@@ -241,17 +253,27 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
             $('#index_content').hide();
             
             // $('#vendor_categories').show();
+            $('#btnBack').show();
             $('#vendor_classification').show();
             // $('#contracted').html(results_div);
 
-            if($('#contracted').hasClass('active')) $('#contracted').html(results_div);
-            if($('#approved').hasClass('active')) $('#approved').html(results_div);
-            if($('#adhoc').hasClass('active')) $('#adhoc').html(results_div);
+            $('#vendor-invoices').html(results_div);
+            $('#vendor-invoices').show();
+
+            // if($('#contracted').is(":visible")) $('#contracted').html(results_div);
+            // if($('#approved').is(":visible")) $('#approved').html(results_div);
+            // if($('#adhoc').is(":visible")) $('#adhoc').html(results_div);
+
+            $('.listview').listview();
+
             // $('#approved').html(results_div);
             // $('#adhoc').html(results_div);
-            $('#view_title').html('Highest Invoices of ' + vendor_name + ' In ' + year);
+            var title_text = 'Highest Invoices of ' + vendor_name + ' In ' + year;
+            if (sdc) title_text += ' and ' + sdc + ' SDC';
+            if (selected_owner_id) title_text += ' for the owner ' + owner;
+            if (selected_vessel_id) title_text += ' for vessel ' + selected_vessel_name;
             
-            
+            $('#view_title').html(title_text);            
             
             $('#back_button').css('display','inline-block');
             step_back = function(){
@@ -342,13 +364,15 @@ function show_more_filter(year) {
         });
         return false;
     }
-    var filterDiv="<div id='filterDiv' style='display:none;-webkit-box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);'>";
+    var filterDiv="<div id='filterDiv' data-role='content' style='display:none;-webkit-box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);'>";
     filterDiv+="<div style='padding:10px 0px 10px 30px;'><table border='0' cellpadding='0' cellspacing='0'><tr><td>SDC</td><td>";
     filterDiv+="<select id='cmbSDC'></select>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td><input id='txtOwner' type='search' placeholder='Search for an Owner' style='width:200px'/></td></tr>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Vessel</td><td><input id='txtVesselFilter' type='search' placeholder='Search for a Vessel' style='width:200px'/></td></tr>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td><input id='txtOwner' name='search' type='search' class='search-textbox' placeholder='Search for an Owner' /></td></tr>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Vessel</td><td><input id='txtVesselFilter' type='search' class='search-textbox' placeholder='Search for a Vessel' /></td></tr>";
     filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='txtOwner' type='button' value='Show' onClick='show_top_vendors_by_turnover("+year+")' /></td></tr></table></div></div>";
     $("#"+year).closest('li').after(filterDiv);
+
+    $('#search-textbox').textinput();
 
     // Fill SDC dropdown
     var SDCoption = '';
