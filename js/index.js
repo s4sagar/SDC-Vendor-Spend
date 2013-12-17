@@ -435,9 +435,10 @@ function show_years() {
         vessel_array = data["vessel"];
         $('.spinner_index').hide();
         var results_div = "<ul data-role='listview' data-divider-theme='b' data-inset='true' id='listview'>";
+        var cur_year = new Date().getFullYear();
         for(var i=0; i<3; i++) {
            // results_div += "<li><a href='javascript:show_top_vendors_by_turnover(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
-            results_div += "<li data-theme='c'><a data-transition='slide' href='javascript:show_more_filter(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
+            results_div += "<li data-theme='c'><a data-transition='slide' href='javascript:show_more_filter(\""+(cur_year - i)+"\")' id='"+(cur_year - i)+"'>"+(cur_year - i);
             // results_div += "<span class='chevron'></span>";
             results_div += "</a></li>";
         }
