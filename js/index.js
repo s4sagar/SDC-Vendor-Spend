@@ -102,6 +102,15 @@ var sdcs = new Array('BSMBE', 'BSMCN', 'BSMCY', 'BSMDE', 'BSMGR', 'BSMHK', 'BSMI
 
 function show_top_vendors_by_turnover(year) {
     hide_all();
+    selected_from_date = $('#txtFromDate').val();
+    selected_to_date = $('#txtToDate').val();
+    //alert(selected_from_date);
+
+    // if(selected_from_date=='')
+    //     selected_from_date=undefined;
+    // if(selected_to_date=='')
+    //     selected_to_date=undefined;
+
     current_step = function(){
                 show_top_vendors_by_turnover(year);
             };
@@ -110,7 +119,8 @@ function show_top_vendors_by_turnover(year) {
     var sdc = $('#cmbSDC').val();
     
     req = $.ajax({
-        url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_top_vendors.php?year=' + year + '&sdcCode=' + sdc + '&ownerid='+owner + '&vesselobjectid=' + vessel,
+        url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_top_vendors_new.php?year=' + year + '&sdcCode=' + sdc + '&ownerid='+owner 
+        + '&vesselobjectid=' + vessel + '&fromdate=' + selected_from_date + '&todate=' + selected_to_date,
         beforeSend: function() {
             $(".spinner_index").css('display','block');
             $(".spinner_index").center();
@@ -359,6 +369,8 @@ var vessel_array;
 var selected_owner_id;
 var selected_vessel_id;
 var selected_vessel_name;
+var selected_from_date;
+var selected_to_date;
 
 function show_more_filter(year) {
     if($("#"+year).closest('li').next('#filterDiv').length>0){
@@ -378,6 +390,8 @@ function show_more_filter(year) {
     filterDiv+="<select id='cmbSDC'></select>";
     filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td><div><input id='txtOwner' name='search' type='text' data-type='search' class='search-textbox' placeholder='Search for an Owner' /></div></td></tr>";
     filterDiv+="</td></tr><tr><td style='padding-right:5px'>Vessel</td><td><div><input id='txtVesselFilter' type='search' class='search-textbox' placeholder='Search for a Vessel' /></div></td></tr>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>From Date</td><td><div><input id='txtFromDate' type='date' class='search-textbox' /></div></td></tr>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>To Date</td><td><div><input id='txtToDate' type='date' class='search-textbox' /></div></td></tr>";
     filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='btnShow' type='button' value='Show' onClick='show_top_vendors_by_turnover("+year+")' /></td></tr></table></div></div>";
 
     $("#"+year).closest('li').after(filterDiv);
