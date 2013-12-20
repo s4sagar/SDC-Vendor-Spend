@@ -232,13 +232,15 @@ function show_top_vendors_by_turnover(year) {
 function show_top_invoices_by_vendor_year(vendor_id, year) {
     hide_all();
 
+    var sdc = $('#cmbSDC').val();    
+
     current_step = function(){
                 show_top_invoices_by_vendor_year(vendor_id, year);
             };
     var sdc = $('#cmbSDC').val();
     req = $.ajax({
         url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_top_invoices_by_vendor_year.php?VendorID='+vendor_id+'&year='+year
-             + '&fromdate=' + selected_from_date + '&todate=' + selected_to_date,
+              + '&sdcCode=' + sdc + '&fromdate=' + selected_from_date + '&todate=' + selected_to_date,
         beforeSend: function() {
             $(".spinner_index").css('display','inline');
             $(".spinner_index").center();
