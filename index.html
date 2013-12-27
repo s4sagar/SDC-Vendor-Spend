@@ -78,11 +78,21 @@
         <div id='adhoc' class="my-navbar-content"></div>
         <div id='vendor-invoices' class="my-navbar-content"></div>
         <div id='searched-vendor' class="my-navbar-content"></div>
+        <div id='vendor-turnover-report' class="my-navbar-content"></div>
     </div>
     <div class='spinner_index'>
       <img src="img/spinner.gif" width="20px" height="20px" style="display:block;margin:auto;"/>
     </div>
 </div>
+<form id="invisible_form" 
+  action="https://www.getvesseltracker.com/sdc_vendor_spend_dev/pdf_export/examples/vendor_turnover_report.php" method="post" target="_blank">
+  <input id="new_window_parameter_year" name="parameter_year" type="hidden" value="default">
+  <input id="new_window_parameter_sdcCode" name="parameter_sdcCode" type="hidden" value="default">
+  <input id="new_window_parameter_ownerid" name="parameter_ownerid" type="hidden" value="default">
+  <input id="new_window_parameter_vesselobjectid" name="parameter_vesselobjectid" type="hidden" value="default">
+  <input id="new_window_parameter_fromdate" name="parameter_fromdate" type="hidden" value="default">
+  <input id="new_window_parameter_todate" name="parameter_todate" type="hidden" value="default">
+</form>
 
       <script type="text/javascript" src="js/index.js"></script>
       <script type="text/javascript">

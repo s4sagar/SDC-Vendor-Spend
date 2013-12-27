@@ -91,6 +91,7 @@ var n = this,
     $('#approved').hide();
     $('#adhoc').hide();
     $('#searched-vendor').hide();
+    $('#vendor-turnover-report').hide();
  }
 
 var step_back = function() {};
@@ -240,7 +241,7 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
     var sdc = $('#cmbSDC').val();
     req = $.ajax({
         url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_top_invoices_by_vendor_year.php?VendorID='+vendor_id+'&year='+year
-              + '&sdcCode=' + sdc + '&fromdate=' + selected_from_date + '&todate=' + selected_to_date,
+              + '&vesselobjectid=' + selected_vessel_id + '&sdcCode=' + sdc + '&fromdate=' + selected_from_date + '&todate=' + selected_to_date,
         beforeSend: function() {
             $(".spinner_index").css('display','inline');
             $(".spinner_index").center();
@@ -395,7 +396,9 @@ function show_more_filter(year) {
     filterDiv+="</td></tr><tr><td style='padding-right:5px'>Vessel</td><td><div><input id='txtVesselFilter' type='search' class='search-textbox' placeholder='Search for a Vessel' /></div></td></tr>";
     filterDiv+="</td></tr><tr><td style='padding-right:5px'>From Date</td><td><div><input id='txtFromDate' type='date' class='search-textbox' /></div></td></tr>";
     filterDiv+="</td></tr><tr><td style='padding-right:5px'>To Date</td><td><div><input id='txtToDate' type='date' class='search-textbox' /></div></td></tr>";
-    filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='btnShow' type='button' value='Show' onClick='show_top_vendors_by_turnover("+year+")' /></td></tr></table></div></div>";
+    filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='btnShow' type='button' value='Show' onClick='show_top_vendors_by_turnover("+year+")' /></td></tr>";
+    filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='btnReport' type='button' value='Report' onClick='show_vendors_turnover_report("+year+")' /></td></tr></table></div></div>";
+
 
     $("#"+year).closest('li').after(filterDiv);
 
@@ -507,3 +510,180 @@ $('.my-navbarbtn').click(function(){
 //               </ul>
 
 
+function show_vendors_turnover_report(year) {
+    hide_all();
+    selected_from_date = $('#txtFromDate').val();
+    selected_to_date = $('#txtToDate').val();
+    //alert(selected_from_date);
+
+    // if(selected_from_date=='')
+    //     selected_from_date=undefined;
+    // if(selected_to_date=='')
+    //     selected_to_date=undefined;
+
+    current_step = function(){
+                show_vendors_turnover_report(year);
+            };
+    var owner = selected_owner_id;
+    var vessel = selected_vessel_id;
+    var sdc = $('#cmbSDC').val();
+    
+    req = $.ajax({
+        url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_vendor_turnover_report.php?year=' + year + '&sdcCode=' + sdc + '&ownerid='+owner 
+        + '&vesselobjectid=' + vessel + '&fromdate=' + selected_from_date + '&todate=' + selected_to_date,
+        beforeSend: function() {
+            $(".spinner_index").css('display','block');
+            $(".spinner_index").center();
+        },
+      
+        success : function(response) {
+            // var results = JSON.parse(response);
+            var results = response;
+            var Total1 = new Array();
+            var Total2 = new Array();
+
+            var results_div = "<input id='btnExport' type='button' value='Export as PDF' onClick='export_pdf("+ year +")'></input><table border='1' cellpadding='0' cellspacing='0'>";
+            results_div += "<tr><td colspan='9'><h1>Summary of BSM Deutschland Supplier Engagement </h1></td></tr>";
+
+            results_div += "<tr><td></td>";
+            for(var i=0; i<results.length; i++) {
+                results_div += "<td colspan='2'><h3>" + results[i]['Year'] + "</h3></td>";
+                if(i!= results.length-1)
+                    results_div += "<td></td>";
+                Total1.push(parseFloat(results[i]['ContractedSuppliers'])
+                    + parseFloat(results[i]['ApprovedSuppliers']) + parseFloat(results[i]['VettingInspection']) 
+                    + parseFloat(results[i]['ClassFlagSateInsurance']) 
+                    );
+                Total2.push(parseFloat(Total1[i]) + parseFloat(results[i]['AdhocSuppliers']));
+            }
+            results_div += "</tr>";
+
+            results_div += "<tr><td><h3>Description</h3></td>";
+            for(var i=0; i<results.length; i++) {
+                results_div += "<td><h3>Amount in USD</h3></td><td><h3>Potential for Harmonization (%)</h3></td>";
+                if(i!= results.length-1)
+                    results_div += "<td></td>";
+            }
+            results_div += "</tr>";
+
+            results_div += "<tr><td>Contracted Suppliers</td>";
+            for(var i=0; i<results.length; i++) {
+                results_div += "<td>" + parseFloat(results[i]['ContractedSuppliers']) +"</td><td>" + 
+                (parseFloat(results[i]['ContractedSuppliers'])/ parseFloat(Total2[i]) * 100).toFixed() + "%</td>";
+                if(i!= results.length-1)
+                    results_div += "<td></td>";
+            }
+            results_div += "</tr>";
+
+            results_div += "<tr><td>Approved Suppliers</td>";
+            for(var i=0; i<results.length; i++) {
+                results_div += "<td>" + parseFloat(results[i]['ApprovedSuppliers']) +"</td><td>" + 
+                (parseFloat(results[i]['ApprovedSuppliers'])/ parseFloat(Total2[i]) * 100).toFixed() + "%</td>";
+                if(i!= results.length-1)
+                    results_div += "<td></td>";
+            }
+            results_div += "</tr>";
+
+            results_div += "<tr><td>Vetting Inspection</td>";
+            for(var i=0; i<results.length; i++) {
+                results_div += "<td>" + parseFloat(results[i]['VettingInspection']) +"</td><td>" + 
+                (parseFloat(results[i]['VettingInspection'])/ parseFloat(Total2[i]) * 100).toFixed() + "%</td>";
+                if(i!= results.length-1)
+                    results_div += "<td></td>";
+            }
+            results_div += "</tr>";
+
+            results_div += "<tr><td>Class/Flag Sate and Insurance</td>";
+            for(var i=0; i<results.length; i++) {
+                results_div += "<td>" + parseFloat(results[i]['ClassFlagSateInsurance']) +"</td><td>" + 
+                (parseFloat(results[i]['ClassFlagSateInsurance'])/ parseFloat(Total2[i]) * 100).toFixed() + "%</td>";
+                if(i!= results.length-1)
+                    results_div += "<td></td>";
+            }
+            results_div += "</tr>";
+
+            results_div += "<tr><td><h3>Total Contracts/Approved/Class/Vetting Supplier Usage</h3></td>";
+            for(var i=0; i<results.length; i++) {
+                results_div += "<td><h3>" + parseFloat(Total1[i]) +"</h3></td><td><h3>" + 
+                (parseFloat(Total1[i])/ parseFloat(Total2[i]) * 100).toFixed() + "%</h3></td>";
+                if(i!= results.length-1)
+                    results_div += "<td></td>";
+            }
+            results_div += "</tr>";
+
+            results_div += "<tr><td>Adhoc Suppliers</td>";
+            for(var i=0; i<results.length; i++) {
+                results_div += "<td>" + parseFloat(results[i]['AdhocSuppliers']) +"</td><td>" + 
+                (parseFloat(results[i]['AdhocSuppliers'])/ parseFloat(Total2[i]) * 100).toFixed() + "%</td>";
+                if(i!= results.length-1)
+                    results_div += "<td></td>";
+            }
+            results_div += "</tr>";
+
+            results_div += "<tr><td><h3>TOTAL Spend UNDER SDC Deutschland</h3></td>";
+            for(var i=0; i<results.length; i++) {
+                results_div += "<td><h3>" + parseFloat(Total2[i]) +"</h3></td><td><h3>" + 
+                (parseFloat(Total2[i])/ parseFloat(Total2[i]) * 100).toFixed() + "%</h3></td>";
+                if(i!= results.length-1)
+                    results_div += "<td></td>";
+            }
+            results_div += "</tr>";
+
+            results_div += "<tr><td>Brokers, Bunkers ,Charterers</td>";
+            for(var i=0; i<results.length; i++) {
+                results_div += "<td>" + parseFloat(results[i]['BrokersBunkersCharterers']) +"</td><td></td>";
+                if(i!= results.length-1)
+                    results_div += "<td></td>";
+            }
+            results_div += "</tr>";
+            results_div += "</table>";
+            
+            $('.spinner_index').hide();
+            $('#index_content').hide();
+            $('#btnBack').show();
+            $('#vendor-turnover-report').html(results_div);
+            $('#vendor-turnover-report').show();
+            $('#back_button').css('display','inline-block');
+            // $('#index_content').show();
+            // $('#index_content').html(results_div);
+            step_back = show_years;
+
+            // console.log(results_div_con);
+
+            $('.listview').listview();
+        }
+    });
+}
+
+
+function export_pdf(year) {
+  //   var form_data= {
+  //   'year': year,
+  //   'sdcCode': $('#cmbSDC').val(),
+  //   'ownerid': selected_owner_id,
+  //   'vesselobjectid': selected_vessel_id,
+  //   'fromdate': $('#txtFromDate').val(),
+  //   'todate': $('#txtToDate').val(),
+  // };
+
+  // window.open('https://www.getvesseltracker.com/sdc_vendor_spend_dev/pdf_export/examples/vendor_turnover_report.php', '_blank');
+    $('#new_window_parameter_year').val(year);
+    // alert($('#new_window_parameter_year').val());
+    $('#new_window_parameter_sdcCode').val($('#cmbSDC').val());
+    // alert($('#new_window_parameter_sdcCode').val());
+    $('#new_window_parameter_ownerid').val(selected_owner_id);
+    $('#new_window_parameter_vesselobjectid').val(selected_vessel_id);
+    $('#new_window_parameter_fromdate').val($('#txtFromDate').val());
+    $('#new_window_parameter_todate').val($('#txtToDate').val());
+    $('#invisible_form').submit();
+
+  // $.ajax({
+  //   url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/pdf_export/examples/vendor_turnover_report.php',
+  //   type: "post",
+  //   data: form_data,
+  //   success : function(response) {
+  //       var w = window.open();
+  //       $(w.document.body).html(response);
+  //   }
+  // });
+}
