@@ -181,3 +181,13 @@ h1 {
 .txtVendor {
     margin-top: 50px;
 }
+
+.login_title {
+    font-size: 22px;
+    font-family: 'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    /*margin-top: 50px;
+    margin-bottom: 50px;*/
+    padding: 50px;
+    text-align: center;
+
+}

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var app = {
+ var app = {
     // Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -59,24 +59,24 @@ function toTitleCase(str)
 jQuery.fn.center = function () {
     this.css("position","absolute");
     this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) +
-                                                $(window).scrollTop()) + "px");
+        $(window).scrollTop()) + "px");
     this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) +
-                                                $(window).scrollLeft()) + "px");
+        $(window).scrollLeft()) + "px");
     return this;
 };
 
 Number.prototype.formatMoney = function(c, d, t){
-var n = this, 
+    var n = this, 
     c = isNaN(c = Math.abs(c)) ? 2 : c, 
     d = d == undefined ? "." : d, 
     t = t == undefined ? "," : t, 
     s = n < 0 ? "-" : "", 
     i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
     j = (j = i.length) > 3 ? j % 3 : 0;
-   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
- };
+    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+};
 
- function hide_all() {
+function hide_all() {
     $('#btnBack').hide();
     $('#navbar').hide();
     $('.spinner_index').hide();
@@ -92,7 +92,8 @@ var n = this,
     $('#adhoc').hide();
     $('#searched-vendor').hide();
     $('#vendor-turnover-report').hide();
- }
+    $('#ajax_error').hide();
+}
 
 var step_back = function() {};
 
@@ -113,8 +114,8 @@ function show_top_vendors_by_turnover(year) {
     //     selected_to_date=undefined;
 
     current_step = function(){
-                show_top_vendors_by_turnover(year);
-            };
+        show_top_vendors_by_turnover(year);
+    };
     var owner = selected_owner_id;
     var vessel = selected_vessel_id;
     var sdc = $('#cmbSDC').val();
@@ -126,7 +127,7 @@ function show_top_vendors_by_turnover(year) {
             $(".spinner_index").css('display','block');
             $(".spinner_index").center();
         },
-      
+
         success : function(response) {
             // var results = JSON.parse(response);
             var results = response;
@@ -226,8 +227,8 @@ function show_top_vendors_by_turnover(year) {
                     $('.listview').listview();
                 }
             });
-        }
-    });
+}
+});
 }
 
 function show_top_invoices_by_vendor_year(vendor_id, year) {
@@ -236,12 +237,12 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
     var sdc = $('#cmbSDC').val();    
 
     current_step = function(){
-                show_top_invoices_by_vendor_year(vendor_id, year);
-            };
+        show_top_invoices_by_vendor_year(vendor_id, year);
+    };
     var sdc = $('#cmbSDC').val();
     req = $.ajax({
         url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_top_invoices_by_vendor_year.php?VendorID='+vendor_id+'&year='+year
-              + '&vesselobjectid=' + selected_vessel_id + '&sdcCode=' + sdc + '&fromdate=' + selected_from_date + '&todate=' + selected_to_date,
+        + '&vesselobjectid=' + selected_vessel_id + '&sdcCode=' + sdc + '&fromdate=' + selected_from_date + '&todate=' + selected_to_date,
         beforeSend: function() {
             $(".spinner_index").css('display','inline');
             $(".spinner_index").center();
@@ -326,7 +327,7 @@ function show_vendor_invoices(vendor_name, sdc) {
             $(".spinner").css('margin','auto');
             // // $(".spinner").center();
         },
-      
+
         success : function(results) {
             // alert(results);
             if (results == null) {
@@ -407,37 +408,37 @@ function show_more_filter(year) {
     // Fill SDC dropdown
     var SDCoption = '';
     for (i=0;i<sdcs.length;i++){
-       SDCoption += '<option value="'+ sdcs[i] + '">' + sdcs[i] + '</option>';
-    }
-    $('#cmbSDC').append(SDCoption);
-    $('#cmbSDC').val('ALL');
+     SDCoption += '<option value="'+ sdcs[i] + '">' + sdcs[i] + '</option>';
+ }
+ $('#cmbSDC').append(SDCoption);
+ $('#cmbSDC').val('ALL');
 
-    $("#txtOwner").autocomplete({
-        source: owners_array,
-        minLength: 1,
-        matchFromStart: false,
-        messages: {
-            noResults: '',
-            results: function() {}
-        },
-        select: function( event, ui ) {
+ $("#txtOwner").autocomplete({
+    source: owners_array,
+    minLength: 1,
+    matchFromStart: false,
+    messages: {
+        noResults: '',
+        results: function() {}
+    },
+    select: function( event, ui ) {
         selected_owner_id = ui.item.ID;
-        }
-    });
-    $("#txtVesselFilter").autocomplete({
-        source: vessel_array,
-        minLength: 1,
-        matchFromStart: false,
-        messages: {
-            noResults: '',
-            results: function() {}
-        },
-        select: function( event, ui ) {
+    }
+});
+ $("#txtVesselFilter").autocomplete({
+    source: vessel_array,
+    minLength: 1,
+    matchFromStart: false,
+    messages: {
+        noResults: '',
+        results: function() {}
+    },
+    select: function( event, ui ) {
         selected_vessel_id = ui.item.ID;
         selected_vessel_name = ui.item.label;
-        }
-    });
-    $("#filterDiv").slideDown("slow");
+    }
+});
+ $("#filterDiv").slideDown("slow");
 }
 
 function show_years() {
@@ -449,8 +450,8 @@ function show_years() {
       beforeSend: function() {
         $(".spinner_index").css('display','block');
         $(".spinner_index").center();
-      },
-      success: function(data){
+    },
+    success: function(data){
         owners_array = data["owner"];
         vessel_array = data["vessel"];
         $('.spinner_index').hide();
@@ -458,7 +459,7 @@ function show_years() {
         var cur_year = new Date().getFullYear();
         for(var i=0; i<3; i++) {
            // results_div += "<li><a href='javascript:show_top_vendors_by_turnover(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
-            results_div += "<li data-theme='c'><a data-transition='slide' href='javascript:show_more_filter(\""+(cur_year - i)+"\")' id='"+(cur_year - i)+"'>"+(cur_year - i);
+           results_div += "<li data-theme='c'><a data-transition='slide' href='javascript:show_more_filter(\""+(cur_year - i)+"\")' id='"+(cur_year - i)+"'>"+(cur_year - i);
             // results_div += "<span class='chevron'></span>";
             results_div += "</a></li>";
         }
@@ -474,15 +475,79 @@ function show_years() {
         $('#index_content').html(results_div);
         $('#listview').listview();
 
-      },
-     error: function() {        
+    },
+    error: function() {        
         alert('Please try again in a minute.');
         $('.spinner_index').hide();
-     } 
-    });
+    } 
+});
 }
 
-show_years();
+// show_years();
+
+// hide_all();
+
+
+var pal_user_id;
+try{
+    pal_user_id = $.jStorage.get("pal_user_id");
+    $.jStorage.set("pal_user_id", '');
+}
+catch(err){    
+}
+if (pal_user_id == null) {
+  hide_all();
+  $('.login').show();
+} else {
+  show_years();
+}
+
+// $('#login_submit').click(function(){
+//     hide_all();
+//     $('#login_form').submit();
+//     alert('hai');
+// });
+
+function login_failure() {
+  $(".spinner").css('display','none');
+  $("#ajax_error").show();
+  $("#ajax_error").html('Wrong Email or Password. Please try again.');
+  $("#ajax_error").attr('style','display:block; text-align:center;');
+}
+
+$('#login_form').submit(function(){
+    var username = $('#login_email').val();
+    var password = $('#login_password').val();
+
+    $.jStorage.set("pal_user_id", username);
+    var form_data= {
+        'username': username,
+        'password': password
+    };
+    req = $.ajax({
+        url: 'https://getVesselTracker.com/ldap_test_spend_tracker.php',
+        type: "post",
+        data: form_data,
+        beforeSend: function() {
+            $(".spinner").css('display','inline');
+            $(".spinner").center();
+        },
+
+        success : function(response) {
+            if (response == 'success') {
+            $('.login').hide();
+                show_years();
+            // location.reload();
+            } else {
+                login_failure();
+            }
+        }
+    });
+  //}
+  $('#login_password').blur();
+  $('#login_email').blur();
+  return false;
+});
 
 
 $('.my-navbarbtn').click(function(){
@@ -522,8 +587,8 @@ function show_vendors_turnover_report(year) {
     //     selected_to_date=undefined;
 
     current_step = function(){
-                show_vendors_turnover_report(year);
-            };
+        show_vendors_turnover_report(year);
+    };
     var owner = selected_owner_id;
     var vessel = selected_vessel_id;
     var sdc = $('#cmbSDC').val();
@@ -535,7 +600,7 @@ function show_vendors_turnover_report(year) {
             $(".spinner_index").css('display','block');
             $(".spinner_index").center();
         },
-      
+
         success : function(response) {
             // var results = JSON.parse(response);
             var results = response;
@@ -667,7 +732,7 @@ function export_pdf(year) {
   // };
 
   // window.open('https://www.getvesseltracker.com/sdc_vendor_spend_dev/pdf_export/examples/vendor_turnover_report.php', '_blank');
-    $('#new_window_parameter_year').val(year);
+  $('#new_window_parameter_year').val(year);
     // alert($('#new_window_parameter_year').val());
     $('#new_window_parameter_sdcCode').val($('#cmbSDC').val());
     // alert($('#new_window_parameter_sdcCode').val());
