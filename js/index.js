@@ -364,7 +364,6 @@ function show_vendor_invoices(vendor_name, sdc) {
                     show_sdc_vendor_spend(sdc);
                 };
             }
-
         }
     });
 }
@@ -393,8 +392,8 @@ function show_more_filter(year) {
     var filterDiv="<div id='filterDiv' data-role='content' style='display:none;-webkit-box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);'>";
     filterDiv+="<div style='padding:10px 0px 10px 30px;'><table border='0' cellpadding='0' cellspacing='0'><tr><td>SDC</td><td>";
     filterDiv+="<select id='cmbSDC'></select>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td><div><input id='txtOwner' name='search' type='text' data-type='search' class='search-textbox' placeholder='Search for an Owner' /></div></td></tr>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Vessel</td><td><div><input id='txtVesselFilter' type='search' class='search-textbox' placeholder='Search for a Vessel' /></div></td></tr>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td><div><input id='txtOwner' type='search' name='search' class='search-textbox' placeholder='Search for an Owner' /></div></td></tr>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Vessel</td><td><div><input id='txtVesselFilter' type='search' name='search' placeholder='Search for a Vessel' /></div></td></tr>";
     filterDiv+="</td></tr><tr><td style='padding-right:5px'>From Date</td><td><div><input id='txtFromDate' type='date' class='search-textbox' /></div></td></tr>";
     filterDiv+="</td></tr><tr><td style='padding-right:5px'>To Date</td><td><div><input id='txtToDate' type='date' class='search-textbox' /></div></td></tr>";
     filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='btnShow' type='button' value='Show' onClick='show_top_vendors_by_turnover("+year+")' /></td></tr>";
@@ -402,18 +401,24 @@ function show_more_filter(year) {
 
 
     $("#"+year).closest('li').after(filterDiv);
-
-    $('#search-textbox').textinput();
-
     // Fill SDC dropdown
     var SDCoption = '';
     for (i=0;i<sdcs.length;i++){
      SDCoption += '<option value="'+ sdcs[i] + '">' + sdcs[i] + '</option>';
- }
- $('#cmbSDC').append(SDCoption);
- $('#cmbSDC').val('ALL');
+    }
+    $('#cmbSDC').append(SDCoption);
+    $('#cmbSDC').val('ALL');
+    
+    $('#cmbSDC').selectmenu();
+    $('#txtOwner').textinput();
+    $('#txtVesselFilter').textinput();
+    $('#txtFromDate').textinput();
+    $('#txtToDate').textinput();
+    $('#btnShow').button();
+    $('#btnReport').button();
 
- $("#txtOwner").autocomplete({
+
+    $("#txtOwner").autocomplete({
     source: owners_array,
     minLength: 1,
     matchFromStart: false,
