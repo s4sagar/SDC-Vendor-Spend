@@ -386,6 +386,10 @@ function show_more_filter(year) {
             $('#cmbSDC').val('ALL');
             $("#filterDiv").insertAfter($("#"+year).closest('li'));
             $("#filterDiv").slideDown("slow"); 
+            $('#btnShow').attr('onClick','');
+            $('#btnShow').attr('onClick','show_top_vendors_by_turnover('+year+')');
+            $('#btnReport').attr('onClick','');
+            $('#btnReport').attr('onClick','show_vendors_turnover_report('+year+')');
         });
         return false;
     }
