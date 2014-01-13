@@ -122,7 +122,7 @@ function show_top_vendors_by_turnover(year) {
     
     req = $.ajax({
         url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_top_vendors.php?year=' + year + '&sdcCode=' + sdc + '&ownerid='+owner 
-        + '&vesselobjectid=' + vessel + '&fromdate=' + selected_from_date + '&todate=' + selected_to_date,
+        + '&vesselobjectid=' + vessel + '&fromdate=' + selected_from_date + '&todate=' + selected_to_date + '&pal_user_id='+ $.jStorage.get("pal_user_id"),
         beforeSend: function() {
             $(".spinner_index").css('display','block');
             $(".spinner_index").center();
@@ -242,7 +242,8 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
     var sdc = $('#cmbSDC').val();
     req = $.ajax({
         url: 'https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_top_invoices_by_vendor_year.php?VendorID='+vendor_id+'&year='+year
-        + '&vesselobjectid=' + selected_vessel_id + '&sdcCode=' + sdc + '&fromdate=' + selected_from_date + '&todate=' + selected_to_date,
+        + '&vesselobjectid=' + selected_vessel_id + '&sdcCode=' + sdc + '&fromdate=' + selected_from_date + '&todate=' + selected_to_date
+        + '&pal_user_id='+ $.jStorage.get("pal_user_id"),
         beforeSend: function() {
             $(".spinner_index").css('display','inline');
             $(".spinner_index").center();
@@ -455,7 +456,7 @@ function show_years() {
     hide_all();
     current_step = show_years;
     $.ajax({
-      url: "https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_vessel_list_filter.php",      
+      url: "https://www.getvesseltracker.com/sdc_vendor_spend_dev/get_vessel_list_filter.php?pal_user_id="+ $.jStorage.get("pal_user_id"),      
       datatype: 'json',
       beforeSend: function() {
         $(".spinner_index").css('display','block');
