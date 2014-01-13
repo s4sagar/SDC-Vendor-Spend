@@ -401,7 +401,8 @@ function show_more_filter(year) {
     filterDiv+="</td></tr><tr><td style='padding-right:5px'>From Date</td><td><div><input id='txtFromDate' type='date' class='search-textbox' /></div></td></tr>";
     filterDiv+="</td></tr><tr><td style='padding-right:5px'>To Date</td><td><div><input id='txtToDate' type='date' class='search-textbox' /></div></td></tr>";
     filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='btnShow' type='button' value='Show' onClick='show_top_vendors_by_turnover("+year+")' /></td></tr>";
-    filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='btnReport' type='button' value='Report' onClick='show_vendors_turnover_report("+year+")' /></td></tr></table></div></div>";
+    // filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='btnReport' type='button' value='Report' onClick='show_vendors_turnover_report("+year+")' /></td></tr>";
+    filterDiv+="</table></div></div>";
 
 
     $("#"+year).closest('li').after(filterDiv);
@@ -419,7 +420,7 @@ function show_more_filter(year) {
     $('#txtFromDate').textinput();
     $('#txtToDate').textinput();
     $('#btnShow').button();
-    $('#btnReport').button();
+    // $('#btnReport').button();
 
 
     $("#txtOwner").autocomplete({
