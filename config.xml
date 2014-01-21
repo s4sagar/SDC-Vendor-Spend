@@ -8,22 +8,6 @@
         Vidya Sagar. S
     </author>
     <content src="index.html" />
-
-    <icon src="cordova/cordova_128.png"/>
-    <icon src="cordova/cordova_android_36.png" gap:platform="android" gap:density="ldpi"/>
-    <icon src="cordova/cordova_android_48.png" gap:platform="android" gap:density="mdpi"/>
-    <icon src="cordova/cordova_android_72.png" gap:platform="android" gap:density="hdpi"/>
-    <icon src="cordova/cordova_android_96.png" gap:platform="android" gap:density="xhdpi"/>
-    <icon src="cordova/cordova_bb_80.png" gap:platform="blackberry"/>
-    <icon src="cordova/cordova_bb_80.png" gap:platform="blackberry" gap:state="hover"/>
-    <icon src="cordova/cordova_ios_57.png" gap:platform="ios" width="57" height="57"/>
-    <icon src="cordova/cordova_ios_72.png" gap:platform="ios" width="72" height="72"/>
-    <icon src="cordova/cordova_ios_114.png" gap:platform="ios" width="114" height="114"/>
-    <icon src="cordova/cordova_ios_144.png" gap:platform="ios" width="144" height="144"/>
-    <icon src="cordova/cordova_64.png" gap:platform="webos"/>
-    <icon src="cordova/cordova_48.png" gap:platform="winphone"/>
-    <icon src="cordova/cordova_173.png" gap:platform="winphone" gap:role="background"/>
-    
     <access origin="*" />
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="true" />
