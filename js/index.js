@@ -153,7 +153,7 @@ function show_top_vendors_by_turnover(year) {
                     if(con_count >= 50) continue;
                     results_div_con += "<li data-theme='c'><a href='javascript:show_top_invoices_by_vendor_year("+results[i]['vendor_id']+", "+year+")' id='"+results[i]['vendor_id']+"'> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
-                    results_div_con += "<span class='my-count'> USD "+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(2, '.', ',')+"</a></span></li>";
+                    results_div_con += "<span class='my-count'> $ "+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</a></span></li>";
                     con_count++;
                 }
                 else if(results[i]['APPROVAL_STATUS'] == "APPROVED"){
@@ -161,7 +161,7 @@ function show_top_vendors_by_turnover(year) {
                     if(app_count >= 50) continue;
                     results_div_app += "<li data-theme='c'><a href='javascript:show_top_invoices_by_vendor_year("+results[i]['vendor_id']+", "+year+")' id='"+results[i]['vendor_id']+"'> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
-                    results_div_app += "<span class='my-count'> USD "+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(2, '.', ',')+"</a></span></li>";
+                    results_div_app += "<span class='my-count'> $ "+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</a></span></li>";
                     app_count++;
                 }
                 else {
@@ -169,7 +169,7 @@ function show_top_vendors_by_turnover(year) {
                     if(else_count >= 50) continue;
                     results_div += "<li data-theme='c'><a href='javascript:show_top_invoices_by_vendor_year("+results[i]['vendor_id']+", "+year+")' id='"+results[i]['vendor_id']+"'> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
-                    results_div += "<span class='my-count'> USD "+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(2, '.', ',')+"</a></span></li>";
+                    results_div += "<span class='my-count'> $ "+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</a></span></li>";
                     else_count++;
                 }
             }
@@ -190,9 +190,9 @@ function show_top_vendors_by_turnover(year) {
             if (sdc) title_text += ' and ' + sdc + ' SDC';
             if (owner) title_text += ' for the owner ' + owner;
             if (vessel) title_text += ' for vessel ' + selected_vessel_name;
-            $('#n_contracted_div').html(' (USD ' + parseFloat(con_sum).formatMoney(2, '.', ',') + ')');
-            $('#n_approved_div').html(' (USD ' + parseFloat(app_sum).formatMoney(2, '.', ',') + ')');
-            $('#n_adhoc_div').html(' (USD ' + parseFloat(else_sum).formatMoney(2, '.', ',') + ')');
+            $('#n_contracted_div').html('$ ' + parseFloat(con_sum).formatMoney(0, '.', ','));
+            $('#n_approved_div').html('$ ' + parseFloat(app_sum).formatMoney(0, '.', ','));
+            $('#n_adhoc_div').html('$ ' + parseFloat(else_sum).formatMoney(0, '.', ','));
             $('#view_title').html( title_text);
             // $('#index_content').show();
             // $('#index_content').html(results_div);
@@ -216,7 +216,7 @@ function show_top_vendors_by_turnover(year) {
                     
                     searched_vendor += "<li data-theme='c'><a href='javascript:show_top_invoices_by_vendor_year(" + ui.item.id + ", " + year + ")' id='" + ui.item.id + "'> <span class='list_text'>" + toTitleCase(ui.item.label) + "</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
-                    searched_vendor += "<span class='my-count'>USD "+parseFloat(ui.item.amount).formatMoney(2, '.', ',')+"</a></span></li>";                   
+                    searched_vendor += "<span class='my-count'> $ "+parseFloat(ui.item.amount).formatMoney(0, '.', ',')+"</a></span></li>";                   
                     
                     searched_vendor += "</ul></div>";
                     $('#contracted').hide();
@@ -258,7 +258,7 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
                 if (results[i]['TITLE'])
                     results_div += "<div class='sub_text vessel_name'> <span class='details_title'><b>" + toTitleCase(results[i]['TITLE']) + "</b></span></div>"
                 // results_div += "<div class='sub_text vessel_name'> <span class='details_title'>Vendor: </span><b>" + toTitleCase(results[i]['vendor_name']) + "</b></div>";
-                console.log(results[i]['Vessel_name']);
+                // console.log(results[i]['Vessel_name']);
                 if(results[i]['Vessel_name'])
                     results_div += "<div class='sub_text vessel_name'> <span class='details_title'>Vessel: </span><b>" + toTitleCase(results[i]['Vessel_name']) + "</b></div>";
                 
@@ -266,7 +266,7 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
                 results_div += "<div class='sub_text invoice_register_date'> <span class='details_title'>Registration Date: </span><b>" + results[i]['REGISTRATION_DATE'].split('T',1)[0] + "</b></div></span>";
                 results_div += "<div class='sub_text invoice_paid_date'> <span class='details_title'>Pay Due Date: </span><b>" + results[i]['PAY_DUE_DATE'].split('T',1)[0] + "</b></div></span>";
                 // results_div += "<span class='chevron'></span>";
-                results_div += "<span class='my-count'>USD "+parseFloat(results[i]['TOTAL_GROUP_CURRENCY']).formatMoney(2, '.', ',')+"</span></a></li>";
+                results_div += "<span class='my-count'>$ "+parseFloat(results[i]['TOTAL_GROUP_CURRENCY']).formatMoney(0, '.', ',')+"</span></a></li>";
             }
             results_div += "</ul>";
 
@@ -276,7 +276,7 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
             //     results_div += "<span class='list_text'>Vendor: <b>"+results[i]['vendor_name'] +"</b></span>";
             //     results_div += "<span class='list_text'>Vessel: <b>"+results[i]['Vessel_name'] +"</b></span>";
             //     // results_div += "<span class='chevron'></span>";
-            //     results_div += "<span class='count'>USD "+parseFloat(results[i]['TOTAL_GROUP_CURRENCY']).formatMoney(2, '.', ',')+"</span></a></li>";
+            //     results_div += "<span class='count'>$ "+parseFloat(results[i]['TOTAL_GROUP_CURRENCY']).formatMoney(0, '.', ',')+"</span></a></li>";
             // }
             // results_div += "</ul>";
             $('.spinner_index').hide();
@@ -346,7 +346,7 @@ function show_vendor_invoices(vendor_name, sdc) {
                     results_div += "<div class='sub_text invoice_register_date'> <span class='details_title'>Invoice Date: </span>" + results[i]['invoice_register_date'].split('t',1)[0] + "</div></span>";
                     results_div += "<div class='sub_text invoice_paid_date'> <span class='details_title'>Paid Date: </span>" + results[i]['paid_date'].split('t',1)[0] + "</div></span>";
                     // results_div += "<span class='chevron'></span>";
-                    results_div += "<span class='count'>USD "+parseFloat(results[i]['vessel_amount']).formatMoney(2, '.', ',')+"</span></a></li>";
+                    results_div += "<span class='count'>$ "+parseFloat(results[i]['vessel_amount']).formatMoney(0, '.', ',')+"</span></a></li>";
                 }
                 results_div += "</ul>";
                 $('.spinner').hide();
@@ -395,13 +395,13 @@ function show_more_filter(year) {
         return false;
     }
     var filterDiv="<div id='filterDiv' data-role='content' style='display:none;-webkit-box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);'>";
-    filterDiv+="<div style='padding:10px 0px 10px 30px;'><table border='0' cellpadding='0' cellspacing='0'><tr><td>SDC</td><td>";
-    filterDiv+="<select id='cmbSDC'></select>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td><div><input id='txtOwner' type='search' name='search' class='search-textbox' placeholder='Search for an Owner' /></div></td></tr>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Vessel</td><td><div><input id='txtVesselFilter' type='search' name='search' placeholder='Search for a Vessel' /></div></td></tr>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>From Date</td><td><div><input id='txtFromDate' type='date' class='search-textbox' /></div></td></tr>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>To Date</td><td><div><input id='txtToDate' type='date' class='search-textbox' /></div></td></tr>";
-    filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='btnShow' type='button' value='Show' onClick='show_top_vendors_by_turnover("+year+")' /></td></tr>";
+    filterDiv+="<div style='padding:10px 0px 10px 10px;'><table border='0' cellpadding='0' cellspacing='0'><tr><td style='padding-right:5px'>SDC</td>";
+    filterDiv+="<td style='padding-right:10px'><select id='cmbSDC'></select>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td style='padding-right:10px'><div><input id='txtOwner' type='search' name='search' class='search-textbox' placeholder='Owner' /></div></td></tr>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Vessel</td><td style='padding-right:10px'><div><input id='txtVesselFilter' type='search' name='search' placeholder='Vessel' /></div></td></tr>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>From Date</td><td style='padding-right:10px'><div><input id='txtFromDate' type='date' class='search-textbox' /></div></td></tr>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>To Date</td><td style='padding-right:10px'><div><input id='txtToDate' type='date' class='search-textbox' /></div></td></tr>";
+    filterDiv+="<tr><td colspan='2' style='text-align:right; padding-right:10px'><input id='btnShow' type='button' value='Show' onClick='show_top_vendors_by_turnover("+year+")' /></td></tr>";
     // filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='btnReport' type='button' value='Report' onClick='show_vendors_turnover_report("+year+")' /></td></tr>";
     filterDiv+="</table></div></div>";
 
