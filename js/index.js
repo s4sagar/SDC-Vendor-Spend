@@ -153,7 +153,7 @@ function show_top_vendors_by_turnover(year) {
                     if(con_count >= 50) continue;
                     results_div_con += "<li data-theme='c'><a href='javascript:show_top_invoices_by_vendor_year("+results[i]['vendor_id']+", "+year+")' id='"+results[i]['vendor_id']+"'> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
-                    results_div_con += "<span class='my-count'> $ "+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</a></span></li>";
+                    results_div_con += "<span class='my-count'> $"+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</a></span></li>";
                     con_count++;
                 }
                 else if(results[i]['APPROVAL_STATUS'] == "APPROVED"){
@@ -161,7 +161,7 @@ function show_top_vendors_by_turnover(year) {
                     if(app_count >= 50) continue;
                     results_div_app += "<li data-theme='c'><a href='javascript:show_top_invoices_by_vendor_year("+results[i]['vendor_id']+", "+year+")' id='"+results[i]['vendor_id']+"'> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
-                    results_div_app += "<span class='my-count'> $ "+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</a></span></li>";
+                    results_div_app += "<span class='my-count'> $"+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</a></span></li>";
                     app_count++;
                 }
                 else {
@@ -169,7 +169,7 @@ function show_top_vendors_by_turnover(year) {
                     if(else_count >= 50) continue;
                     results_div += "<li data-theme='c'><a href='javascript:show_top_invoices_by_vendor_year("+results[i]['vendor_id']+", "+year+")' id='"+results[i]['vendor_id']+"'> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
-                    results_div += "<span class='my-count'> $ "+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</a></span></li>";
+                    results_div += "<span class='my-count'> $"+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</a></span></li>";
                     else_count++;
                 }
             }
@@ -190,9 +190,9 @@ function show_top_vendors_by_turnover(year) {
             if (sdc) title_text += ' and ' + sdc + ' SDC';
             if (owner) title_text += ' for the owner ' + owner;
             if (vessel) title_text += ' for vessel ' + selected_vessel_name;
-            $('#n_contracted_div').html('$ ' + parseFloat(con_sum).formatMoney(0, '.', ','));
-            $('#n_approved_div').html('$ ' + parseFloat(app_sum).formatMoney(0, '.', ','));
-            $('#n_adhoc_div').html('$ ' + parseFloat(else_sum).formatMoney(0, '.', ','));
+            $('#n_contracted_div').html('$' + parseFloat(con_sum).formatMoney(0, '.', ','));
+            $('#n_approved_div').html('$' + parseFloat(app_sum).formatMoney(0, '.', ','));
+            $('#n_adhoc_div').html('$' + parseFloat(else_sum).formatMoney(0, '.', ','));
             $('#view_title').html( title_text);
             // $('#index_content').show();
             // $('#index_content').html(results_div);
@@ -216,7 +216,7 @@ function show_top_vendors_by_turnover(year) {
                     
                     searched_vendor += "<li data-theme='c'><a href='javascript:show_top_invoices_by_vendor_year(" + ui.item.id + ", " + year + ")' id='" + ui.item.id + "'> <span class='list_text'>" + toTitleCase(ui.item.label) + "</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
-                    searched_vendor += "<span class='my-count'> $ "+parseFloat(ui.item.amount).formatMoney(0, '.', ',')+"</a></span></li>";                   
+                    searched_vendor += "<span class='my-count'> $"+parseFloat(ui.item.amount).formatMoney(0, '.', ',')+"</a></span></li>";                   
                     
                     searched_vendor += "</ul></div>";
                     $('#contracted').hide();
@@ -266,7 +266,7 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
                 results_div += "<div class='sub_text invoice_register_date'> <span class='details_title'>Registration Date: </span><b>" + results[i]['REGISTRATION_DATE'].split('T',1)[0] + "</b></div></span>";
                 results_div += "<div class='sub_text invoice_paid_date'> <span class='details_title'>Pay Due Date: </span><b>" + results[i]['PAY_DUE_DATE'].split('T',1)[0] + "</b></div></span>";
                 // results_div += "<span class='chevron'></span>";
-                results_div += "<span class='my-count'>$ "+parseFloat(results[i]['TOTAL_GROUP_CURRENCY']).formatMoney(0, '.', ',')+"</span></a></li>";
+                results_div += "<span class='my-count'>$"+parseFloat(results[i]['TOTAL_GROUP_CURRENCY']).formatMoney(0, '.', ',')+"</span></a></li>";
             }
             results_div += "</ul>";
 
@@ -276,7 +276,7 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
             //     results_div += "<span class='list_text'>Vendor: <b>"+results[i]['vendor_name'] +"</b></span>";
             //     results_div += "<span class='list_text'>Vessel: <b>"+results[i]['Vessel_name'] +"</b></span>";
             //     // results_div += "<span class='chevron'></span>";
-            //     results_div += "<span class='count'>$ "+parseFloat(results[i]['TOTAL_GROUP_CURRENCY']).formatMoney(0, '.', ',')+"</span></a></li>";
+            //     results_div += "<span class='count'>$"+parseFloat(results[i]['TOTAL_GROUP_CURRENCY']).formatMoney(0, '.', ',')+"</span></a></li>";
             // }
             // results_div += "</ul>";
             $('.spinner_index').hide();
@@ -346,7 +346,7 @@ function show_vendor_invoices(vendor_name, sdc) {
                     results_div += "<div class='sub_text invoice_register_date'> <span class='details_title'>Invoice Date: </span>" + results[i]['invoice_register_date'].split('t',1)[0] + "</div></span>";
                     results_div += "<div class='sub_text invoice_paid_date'> <span class='details_title'>Paid Date: </span>" + results[i]['paid_date'].split('t',1)[0] + "</div></span>";
                     // results_div += "<span class='chevron'></span>";
-                    results_div += "<span class='count'>$ "+parseFloat(results[i]['vessel_amount']).formatMoney(0, '.', ',')+"</span></a></li>";
+                    results_div += "<span class='count'>$"+parseFloat(results[i]['vessel_amount']).formatMoney(0, '.', ',')+"</span></a></li>";
                 }
                 results_div += "</ul>";
                 $('.spinner').hide();
