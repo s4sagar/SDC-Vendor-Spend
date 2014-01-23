@@ -61,7 +61,7 @@
     <preference name="detect-data-types" value="false" />
     <preference name="exit-on-suspend" value="false" />
 
-    <preference name="webviewbounce" value="true" />
+    <preference name="webviewbounce" value="false" />
     <preference name="stay-in-webview" value="false" />
     <preference name="show-splash-screen-spinner" value="false" />
     <preference name="auto-hide-splash-screen" value="true" /> <!-- if set to false, the splash screen must be hidden using a JavaScript API -->
