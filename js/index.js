@@ -463,6 +463,7 @@ function show_more_filter(year) {
 }
 
 function show_years() {
+
     hide_all();
     current_step = show_years;
     var currentTime = new Date();
@@ -532,20 +533,24 @@ function show_years() {
 
 // hide_all();
 
-
 var pal_user_id;
-try{
-    pal_user_id = $.jStorage.get("pal_user_id");
-    $.jStorage.set("pal_user_id", '');
-}
-catch(err){    
-}
-if (pal_user_id == null) {
-  hide_all();
-  $('.login').show();
-} else {
-  show_years();
-}
+
+$(document).ready(function() {
+    try{
+        pal_user_id = $.jStorage.get("pal_user_id");
+        // $.jStorage.set("pal_user_id", '');
+    }
+    catch(err){    
+    }
+    if (pal_user_id == null) {
+      hide_all();
+      $('.login').show();
+    } else {
+        $('.login').hide();
+        show_years();
+    }
+    
+});
 
 // $('#login_submit').click(function(){
 //     hide_all();
@@ -581,7 +586,8 @@ $('#login_form').submit(function(){
         success : function(response) {
             if (response == 'success') {
             $('.login').hide();
-                show_years();
+            $.jStorage.set("pal_user_id", username);
+            show_years();
             // location.reload();
             } else {
                 login_failure();
