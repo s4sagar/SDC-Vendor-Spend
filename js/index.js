@@ -618,6 +618,7 @@ function write_reg_id_to_aws(push_reg_id) {
 
       success : function(response) {
         $.jStorage.set("push_registered", true);
+        alert('success reg');
       }
       
       // error : function(xhr, textStatus, errorThrown ) {
@@ -640,7 +641,7 @@ function write_reg_id_to_aws(push_reg_id) {
 }
 
 function register_push_service() {
-        // alert('trying reg');
+    alert('trying reg');
     if (window.plugins.pushNotification) {
       // if ( device.platform == 'android' || device.platform == 'Android' )
       // {
@@ -711,6 +712,7 @@ function onNotificationGCM(e) {
             if ( e.regid.length > 0 )
             {
                 console.log("Regid " + e.regid);
+                alert(e.regid);
                 write_reg_id_to_aws(e.regid);
             }
         break;
