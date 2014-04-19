@@ -37,6 +37,22 @@
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
         navigator.splashscreen.show();
+        //Handle back android
+        document.addEventListener("backbutton", function(e)
+        {
+            $("#app-status-ul").append('<li>backbutton event received</li>');
+
+            if( $("#home").length > 0 )
+            {
+                e.preventDefault();
+                pushNotification.unregister(successHandler, errorHandler);
+                navigator.app.exitApp();
+            }
+            else
+            {
+                navigator.app.backHistory();
+            }
+        }, false);
         // if (parseFloat(window.device.version) === 7.0) {
         //   document.body.style.marginTop = "20px";
         // }
