@@ -565,6 +565,8 @@ $(document).ready(function() {
       $('.login').show();
     } else {
         $('.login').hide();
+        if (push_registered == null)
+            register_push_service();
         show_years();
     }
     
@@ -605,7 +607,6 @@ $('#login_form').submit(function(){
             if (response == 'success') {
                 $('.login').hide();
                 $.jStorage.set("pal_user_id", username);
-                register_push_service();
                 show_years();
             // location.reload();
             } else {
@@ -662,6 +663,7 @@ function register_push_service() {
       // if ( device.platform == 'android' || device.platform == 'Android' )
       // {
         var push_notification = window.plugins.pushNotification;
+        alert('reg');
         push_notification.register(app.successHandler, app.errorHandler,{"senderID":"213694031514","ecb":"app.onNotificationGCM"});
           // pushNotification.register(
           //     app.successHandler,
