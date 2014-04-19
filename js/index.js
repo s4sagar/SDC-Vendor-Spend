@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ var pushNotification;
  var app = {
     // Application Constructor
     initialize: function() {
@@ -533,14 +534,15 @@ function show_years() {
 
 // hide_all();
 
-var pal_user_id;
+var pal_user_id,push_registered;
 
 $(document).ready(function() {
     try{
         pal_user_id = $.jStorage.get("pal_user_id");
         // $.jStorage.set("pal_user_id", '');
+        push_registered = $.jStorage.get("push_registered");
     }
-    catch(err){    
+    catch(err){
     }
     if (pal_user_id == null) {
       hide_all();
@@ -585,9 +587,10 @@ $('#login_form').submit(function(){
 
         success : function(response) {
             if (response == 'success') {
-            $('.login').hide();
-            $.jStorage.set("pal_user_id", username);
-            show_years();
+                $('.login').hide();
+                $.jStorage.set("pal_user_id", username);
+                register_push_service();
+                show_years();
             // location.reload();
             } else {
                 login_failure();
@@ -600,6 +603,132 @@ $('#login_form').submit(function(){
   return false;
 });
 
+function write_reg_id_to_aws(push_reg_id) {
+
+    var pal_user_id = $.jStorage.get("pal_user_id");
+    var form_data= {
+      'pal_user_id': pal_user_id,
+      'gcm_registry_id': push_reg_id,
+      'app': 'spend_tracker'
+    };
+    req = $.ajax({
+      url: 'https://getVesselTracker.com/register_push_device.php',
+      type: "post",
+      data: form_data,
+
+      success : function(response) {
+        $.jStorage.set("push_registered", true);
+      }
+      
+      // error : function(xhr, textStatus, errorThrown ) {
+      //   if (textStatus == 'timeout') {
+      //       this.tryCount++;
+      //       if (this.tryCount <= this.retryLimit) {
+      //           //try again
+      //           $.ajax(this);
+      //           return;
+      //       }            
+      //       return;
+      //   }
+      //   if (xhr.status == 500) {
+      //       //handle error
+      //   } else {
+      //       //handle error
+      //   }
+      // }
+    });
+}
+
+function register_push_service() {
+        // alert('trying reg');
+    if (window.plugins.pushNotification) {
+      // if ( device.platform == 'android' || device.platform == 'Android' )
+      // {
+        var push_notification = window.plugins.pushNotification;
+        push_notification.register(app.successHandler, app.errorHandler,{"senderID":"213694031514","ecb":"app.onNotificationGCM"});
+          // pushNotification.register(
+          //     app.successHandler,
+          //     app.errorHandler, {
+          //         "senderID":"213694031514",
+          //         "ecb":"app.onNotificationGCM"
+          //     });
+        // }
+        // else
+        //   {alert('trying IOS');
+        // var pushNotification = window.plugins.pushNotification;
+        // pushNotification.register(
+        //  app.tokenHandler,
+        //  app.errorHandler, {
+        //   "badge":"true",
+        //   "sound":"true",
+        //   "alert":"true",
+        //   "ecb":"app.onNotificationAPN"
+        // });
+    // }
+    }
+}
+
+// result contains any message sent from the plugin call
+function successHandler (result) {
+    // alert('result = ' + result);
+}
+
+// result contains any error description text returned from the plugin call
+function errorHandler (error) {
+    // alert('error = ' + error);
+}
+
+function tokenHandler (result) {
+    // Your iOS push server needs to know the token before it can push to this device
+    // here is where you might want to send it the token for later use.
+    // alert('device token = ' + result);
+}
+
+// iOS
+function onNotificationAPN (event) {
+    if ( event.alert )
+    {
+        navigator.notification.alert(event.alert);
+    }
+
+    if ( event.sound )
+    {
+        var snd = new Media(event.sound);
+        snd.play();
+    }
+
+    if ( event.badge )
+    {
+        pushNotification.setApplicationIconBadgeNumber(successHandler, errorHandler, event.badge);
+    }
+}
+
+// Android
+function onNotificationGCM(e) {
+    switch( e.event )
+    {
+        case 'registered':
+            if ( e.regid.length > 0 )
+            {
+                console.log("Regid " + e.regid);
+                write_reg_id_to_aws(e.regid);
+            }
+        break;
+
+        case 'message':
+          // this is the actual push notification. its format depends on the data model from the push server
+          alert('message = '+e.message+' msgcnt = '+e.msgcnt);
+        break;
+
+        case 'error':
+          alert('GCM error = '+e.msg);
+        break;
+
+        default:
+          alert('An unknown GCM event has occurred');
+          break;
+    }
+}
 
 $('.my-navbarbtn').click(function(){
   $('.my-navbar-content').hide();
