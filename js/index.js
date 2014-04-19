@@ -53,6 +53,11 @@
                 navigator.app.backHistory();
             }
         }, false);
+        // ALERT any errors
+        window.onerror = function(msg, url, linenumber) {
+            alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
+            return true;
+        };
         // if (parseFloat(window.device.version) === 7.0) {
         //   document.body.style.marginTop = "20px";
         // }
@@ -664,7 +669,7 @@ function register_push_service() {
       // {
         var push_notification = window.plugins.pushNotification;
         alert('reg');
-        push_notification.register(app.successHandler, app.errorHandler,{"senderID":"213694031514","ecb":"app.onNotificationGCM"});
+        push_notification.register(successHandler, errorHandler,{"senderID":"213694031514","ecb":"onNotificationGCM"});
           // pushNotification.register(
           //     app.successHandler,
           //     app.errorHandler, {
