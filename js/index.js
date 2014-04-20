@@ -549,6 +549,8 @@ function show_years() {
         $('#index_content').show();
         $('#listview').listview();
     }
+    if ($.jStorage.get("push_registered") == null)
+        register_push_service();
 }
 
 // show_years();
@@ -571,8 +573,6 @@ $(document).ready(function() {
     } else {
         $('.login').hide();
         show_years();
-        if (push_registered == null)
-            register_push_service();
     }
     
 });
