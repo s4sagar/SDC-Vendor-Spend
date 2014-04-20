@@ -640,7 +640,7 @@ function write_reg_id_to_aws(push_reg_id) {
 
       success : function(response) {
         $.jStorage.set("push_registered", true);
-        alert('success reg');
+        // alert('success reg');
       }
       
       // error : function(xhr, textStatus, errorThrown ) {
@@ -663,15 +663,14 @@ function write_reg_id_to_aws(push_reg_id) {
 }
 
 function register_push_service() {
-    alert('trying register: '+ window.plugins.pushNotification);
+    // alert('trying register: '+ window.plugins.pushNotification);
     // if (window.plugins.pushNotification != null) {
       if ( device.platform == 'android' || device.platform == 'Android' )
       {
         var push_notification = window.plugins.pushNotification;
-        alert('init');
+        // alert('init');
         push_notification.register(successHandler, errorHandler,{"senderID":"213694031514","ecb":"onNotificationGCM"});
-        alert('reg done');
-        // alert('reg');
+        // alert('reg done');
         
           // pushNotification.register(
           //     app.successHandler,
@@ -697,12 +696,12 @@ function register_push_service() {
 
 // result contains any message sent from the plugin call
 function successHandler (result) {
-    alert('result = ' + result);
+    // alert('result = ' + result);
 }
 
 // result contains any error description text returned from the plugin call
 function errorHandler (error) {
-    alert('error = ' + error);
+    // alert('error = ' + error);
 }
 
 function tokenHandler (result) {
@@ -739,14 +738,14 @@ function onNotificationGCM(e) {
             if ( e.regid.length > 0 )
             {
                 console.log("Regid " + e.regid);
-                alert(e.regid);
+                // alert(e.regid);
                 write_reg_id_to_aws(e.regid);
             }
         break;
 
         case 'message':
           // this is the actual push notification. its format depends on the data model from the push server
-          alert('message = '+e.message+' msgcnt = '+e.msgcnt);
+          alert('message = '+e.message+' id = '+e.invoice_id);
         break;
 
         case 'error':
