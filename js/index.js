@@ -664,13 +664,13 @@ function write_reg_id_to_aws(push_reg_id) {
 
 function register_push_service() {
     alert('trying register: '+ window.plugins.pushNotification);
-    var push_notification = window.plugins.pushNotification;
-    alert('init');
-    push_notification.register(successHandler, errorHandler,{"senderID":"213694031514","ecb":"onNotificationGCM"});
-    alert('reg done');
     // if (window.plugins.pushNotification != null) {
-      // if ( device.platform == 'android' || device.platform == 'Android' )
-      // {
+      if ( device.platform == 'android' || device.platform == 'Android' )
+      {
+        var push_notification = window.plugins.pushNotification;
+        alert('init');
+        push_notification.register(successHandler, errorHandler,{"senderID":"213694031514","ecb":"onNotificationGCM"});
+        alert('reg done');
         // alert('reg');
         
           // pushNotification.register(
@@ -691,7 +691,7 @@ function register_push_service() {
         //   "alert":"true",
         //   "ecb":"app.onNotificationAPN"
         // });
-    // }
+        }
     // }
 }
 
