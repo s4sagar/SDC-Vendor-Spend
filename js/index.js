@@ -731,7 +731,7 @@ function onNotificationAPN (event) {
 
 // Android
 function onNotificationGCM(e) {
-    alert('notif');
+    // alert('notif');
     switch( e.event )
     {
         case 'registered':
@@ -745,7 +745,8 @@ function onNotificationGCM(e) {
 
         case 'message':
           // this is the actual push notification. its format depends on the data model from the push server
-          alert('message = '+e.message+' id = '+e.invoice_id);
+          // alert('message = '+e.message+' id = '+e.invoice_id);
+          alert(e);
         break;
 
         case 'error':
