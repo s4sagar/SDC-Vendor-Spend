@@ -570,9 +570,9 @@ $(document).ready(function() {
       $('.login').show();
     } else {
         $('.login').hide();
+        show_years();
         if (push_registered == null)
             register_push_service();
-        show_years();
     }
     
 });
@@ -663,7 +663,7 @@ function write_reg_id_to_aws(push_reg_id) {
 }
 
 function register_push_service() {
-    alert('trying reg');
+    alert('trying register');
     // if (window.plugins.pushNotification != null) {
       // if ( device.platform == 'android' || device.platform == 'Android' )
       // {
