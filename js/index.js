@@ -669,7 +669,9 @@ function register_push_service() {
       // {
         // alert('reg');
         var push_notification = window.plugins.pushNotification;
+        alert('init');
         push_notification.register(successHandler, errorHandler,{"senderID":"213694031514","ecb":"onNotificationGCM"});
+        alert('reg done');
           // pushNotification.register(
           //     app.successHandler,
           //     app.errorHandler, {
@@ -694,12 +696,12 @@ function register_push_service() {
 
 // result contains any message sent from the plugin call
 function successHandler (result) {
-    // alert('result = ' + result);
+    alert('result = ' + result);
 }
 
 // result contains any error description text returned from the plugin call
 function errorHandler (error) {
-    // alert('error = ' + error);
+    alert('error = ' + error);
 }
 
 function tokenHandler (result) {
@@ -729,6 +731,7 @@ function onNotificationAPN (event) {
 
 // Android
 function onNotificationGCM(e) {
+    alert('notif');
     switch( e.event )
     {
         case 'registered':
