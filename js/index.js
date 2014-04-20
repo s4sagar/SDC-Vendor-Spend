@@ -664,11 +664,11 @@ function write_reg_id_to_aws(push_reg_id) {
 
 function register_push_service() {
     alert('trying reg');
-    if (window.plugins.pushNotification) {
+    // if (window.plugins.pushNotification != null) {
       // if ( device.platform == 'android' || device.platform == 'Android' )
       // {
+        // alert('reg');
         var push_notification = window.plugins.pushNotification;
-        alert('reg');
         push_notification.register(successHandler, errorHandler,{"senderID":"213694031514","ecb":"onNotificationGCM"});
           // pushNotification.register(
           //     app.successHandler,
@@ -689,7 +689,7 @@ function register_push_service() {
         //   "ecb":"app.onNotificationAPN"
         // });
     // }
-    }
+    // }
 }
 
 // result contains any message sent from the plugin call
