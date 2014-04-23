@@ -3,7 +3,7 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
 		id="com.bsm-spendtracker"
 		version = "1.0.2"
-		versionCode = "78">
+		versionCode = "79">
 
     <name>SpendTracker</name>
 
