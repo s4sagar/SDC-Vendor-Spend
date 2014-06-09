@@ -721,20 +721,7 @@ function onNotificationGCM (e) {
 
         case 'message':
           // this is the actual push notification. its format depends on the data model from the push server
-           alert('this one message = '+e.message+' msgcnt = '+e.msgcnt);
-            index_page_call();
-            if(e.message.toUpperCase().indexOf('PLAN') > -1) {
-                show_plan_details();
-            }
-            if(e.message.toUpperCase().indexOf('TRAINING') > -1) {
-                show_training_details();
-            }
-            if(e.message.toUpperCase().indexOf('FLIGHT') > -1) {
-                show_flight_details();
-            }
-            if(e.message.toUpperCase().indexOf('ALLOTMENT') > -1) {
-                allotment_details();
-            }
+           showalerts();
         break;
 
         case 'error':
@@ -974,9 +961,14 @@ function showalerts() {
     if($("#index_content").css("display") == "block") {
         $('#index_content').hide();
         $('#alert_content').show();
+        show_alerts();
     } else {
         $('#index_content').show();
         $('#alert_content').hide();
     }
+}
+
+function show_alerts() {
+
 }
 
