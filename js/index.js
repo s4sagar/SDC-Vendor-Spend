@@ -721,6 +721,7 @@ function onNotificationGCM (e) {
 
         case 'message':
           // this is the actual push notification. its format depends on the data model from the push server
+          alert('this one message = '+e.message+' msgcnt = '+e.msgcnt);
            showalerts();
         break;
 
