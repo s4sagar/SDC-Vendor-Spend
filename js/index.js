@@ -745,8 +745,12 @@ function onNotificationGCM (e) {
 }
 
 function write_reg_id_to_aws(push_reg_id) {
-
+    alert("write_reg_id_to_aws")''
     var pal_user_id = $.jStorage.get("pal_user_id");
+
+    alert("pal_user_id"+pal_user_id);
+    alert("push_reg_id"+push_reg_id);
+    
     var form_data= {
       'pal_user_id': pal_user_id,
       'gcm_registry_id': push_reg_id,
