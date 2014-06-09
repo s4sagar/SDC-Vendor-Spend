@@ -1000,17 +1000,6 @@ function export_pdf(year) {
   // });
 }
 
-<<<<<<< HEAD
-function showalerts() {
-    if($("#index_content").css("display") == "block") {
-        $('#index_content').hide();
-        $('#alert_content').show();
-    } else {
-        $('#index_content').show();
-        $('#alert_content').hide();
-    }
-}
-=======
 $('#n_contracted').click(function  () {
     $('#contracted').show();
     $('#approved').hide();
@@ -1033,4 +1022,4 @@ $('#n_adhoc').click(function  () {
     $('#adhoc').show();
     $('#searched-vendor').hide();
 });
->>>>>>> d8172d1b3bb96a87a1d26d986e86aed603689114
+
