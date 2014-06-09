@@ -688,6 +688,62 @@ $('#login_form').submit(function(){
   return false;
 });
 
+function register_push_service() {
+    var pushNotification = window.plugins.pushNotification;
+    pushNotification.register(successHandler, errorHandler,{"senderID":"1075090837516","ecb":"onNotificationGCM"});
+
+}
+
+function successHandler (result) {
+    alert('Callback Success! Result = '+result);
+
+}
+
+// result contains any error description text returned from the plugin call
+function errorHandler (error) {
+    alert("register_push_service errorHandler:"+error);
+}
+
+function onNotificationGCM (e) {
+    switch( e.event )
+    {
+        case 'registered':
+            if ( e.regid.length > 0 )
+            {
+                //console.log("Regid " + e.regid);
+                alert('registration id = '+e.regid);
+                write_reg_id_to_aws(e.regid);
+            }
+        break;
+
+        case 'message':
+          // this is the actual push notification. its format depends on the data model from the push server
+           alert('this one message = '+e.message+' msgcnt = '+e.msgcnt);
+            index_page_call();
+            if(e.message.toUpperCase().indexOf('PLAN') > -1) {
+                show_plan_details();
+            }
+            if(e.message.toUpperCase().indexOf('TRAINING') > -1) {
+                show_training_details();
+            }
+            if(e.message.toUpperCase().indexOf('FLIGHT') > -1) {
+                show_flight_details();
+            }
+            if(e.message.toUpperCase().indexOf('ALLOTMENT') > -1) {
+                allotment_details();
+            }
+        break;
+
+        case 'error':
+          alert('GCM error = '+e.msg);
+        break;
+
+        default:
+          alert('An unknown GCM event has occurred');
+          break;
+    }
+}
+
 function write_reg_id_to_aws(push_reg_id) {
 
     var pal_user_id = $.jStorage.get("pal_user_id");
@@ -702,125 +758,13 @@ function write_reg_id_to_aws(push_reg_id) {
       data: form_data,
 
       success : function(response) {
+        alert("push_registered");
         $.jStorage.set("push_registered", true);
-        // alert('success reg');
       }
       
-      // error : function(xhr, textStatus, errorThrown ) {
-      //   if (textStatus == 'timeout') {
-      //       this.tryCount++;
-      //       if (this.tryCount <= this.retryLimit) {
-      //           //try again
-      //           $.ajax(this);
-      //           return;
-      //       }            
-      //       return;
-      //   }
-      //   if (xhr.status == 500) {
-      //       //handle error
-      //   } else {
-      //       //handle error
-      //   }
-      // }
     });
 }
 
-function register_push_service() {
-    // alert('trying register: '+ window.plugins.pushNotification);
-    // if (window.plugins.pushNotification != null) {
-      if ( device.platform == 'android' || device.platform == 'Android' )
-      {
-        var push_notification = window.plugins.pushNotification;
-        // alert('init');
-        push_notification.register(successHandler, errorHandler,{"senderID":"213694031514","ecb":"onNotificationGCM"});
-        // alert('reg done');
-        
-          // pushNotification.register(
-          //     app.successHandler,
-          //     app.errorHandler, {
-          //         "senderID":"213694031514",
-          //         "ecb":"app.onNotificationGCM"
-          //     });
-        // }
-        // else
-        //   {alert('trying IOS');
-        // var pushNotification = window.plugins.pushNotification;
-        // pushNotification.register(
-        //  app.tokenHandler,
-        //  app.errorHandler, {
-        //   "badge":"true",
-        //   "sound":"true",
-        //   "alert":"true",
-        //   "ecb":"app.onNotificationAPN"
-        // });
-        }
-    // }
-}
-
-// result contains any message sent from the plugin call
-function successHandler (result) {
-    // alert('result = ' + result);
-}
-
-// result contains any error description text returned from the plugin call
-function errorHandler (error) {
-    // alert('error = ' + error);
-}
-
-function tokenHandler (result) {
-    // Your iOS push server needs to know the token before it can push to this device
-    // here is where you might want to send it the token for later use.
-    // alert('device token = ' + result);
-}
-
-// iOS
-function onNotificationAPN (event) {
-    if ( event.alert )
-    {
-        navigator.notification.alert(event.alert);
-    }
-
-    if ( event.sound )
-    {
-        var snd = new Media(event.sound);
-        snd.play();
-    }
-
-    if ( event.badge )
-    {
-        pushNotification.setApplicationIconBadgeNumber(successHandler, errorHandler, event.badge);
-    }
-}
-
-// Android
-function onNotificationGCM(e) {
-    // alert('notif');
-    switch( e.event )
-    {
-        case 'registered':
-            if ( e.regid.length > 0 )
-            {
-                console.log("Regid " + e.regid);
-                // alert(e.regid);
-                write_reg_id_to_aws(e.regid);
-            }
-        break;
-
-        case 'message':
-          // this is the actual push notification. its format depends on the data model from the push server
-          // alert('message = '+e.message+' id = '+e.invoice_id);
-          alert(e);
-        break;
-
-        case 'error':
-          alert('GCM error = '+e.msg);
-        break;
-
-        default:
-          alert('An unknown GCM event has occurred');
-          break;
-    }
-}
 
 function show_vendors_turnover_report(year) {
     hide_all();
