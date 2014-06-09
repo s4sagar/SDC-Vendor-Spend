@@ -1023,3 +1023,13 @@ $('#n_adhoc').click(function  () {
     $('#searched-vendor').hide();
 });
 
+function showalerts() {
+    if($("#index_content").css("display") == "block") {
+        $('#index_content').hide();
+        $('#alert_content').show();
+    } else {
+        $('#index_content').show();
+        $('#alert_content').hide();
+    }
+}
+

@@ -36,9 +36,9 @@
 <div id="container" class='smooth full-height'>
   <div class="topcoat-navigation-bar on-top header">
     <div class="topcoat-navigation-bar__item left quarter">
-      <a id="btnAlert" class="topcoat-icon-button--quiet" href="">
-        <span class="icon-bell2"></span>
-      </a>
+      <div id="btnAlert" class="topcoat-icon-button--quiet">
+        <span class="icon-bell2" onclick="showalerts()"></span>
+      </div>
             <!-- <a class="topcoat-icon-button--quiet">
               <span class="topcoat-icon topcoat-icon--menu-stack"></span>
             </a> -->
@@ -95,6 +95,7 @@
     </div>
     <div id="index_content" style="display: block;"></div>
     <div id='view_title'></div>
+    <div id="alert_content"></div>
     <div id='contracted' class="my-navbar-content"></div>
     <div id='approved' class="my-navbar-content"></div>
     <div id='adhoc' class="my-navbar-content"></div>
