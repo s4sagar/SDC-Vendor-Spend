@@ -125,6 +125,7 @@ function hide_all() {
     $('#searched-vendor').hide();
     $('#vendor-turnover-report').hide();
     $('#ajax_error').hide();
+    $('#alert_content').hide();
 }
 
 var step_back = function() {};
@@ -960,4 +961,14 @@ function export_pdf(year) {
   //       $(w.document.body).html(response);
   //   }
   // });
+}
+
+function showalerts() {
+    if($("#index_content").css("display") == "block") {
+        $('#index_content').hide();
+        $('#alert_content').show();
+    } else {
+        $('#index_content').show();
+        $('#alert_content').hide();
+    }
 }
