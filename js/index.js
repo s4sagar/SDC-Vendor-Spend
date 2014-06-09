@@ -757,7 +757,7 @@ function write_reg_id_to_aws(push_reg_id) {
       type: "post",
       data: form_data,
 
-      success : function(response) {
+      success : function(response) { alert(response);
         alert("push_registered");
         $.jStorage.set("push_registered", true);
       }
