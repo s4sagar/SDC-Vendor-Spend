@@ -7,20 +7,23 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <title></title>
 
-
   <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
   <link rel="apple-touch-icon-precomposed" href="apple-touch-icon.png"/>
   
+  <link rel="stylesheet" href="css/topcoat/css/topcoat-mobile-dark.css">
+  <link rel="stylesheet" href="css/topcoat/css/topcoat-extra-dark.css">
+  <link rel="stylesheet" href="css/index-dark.css">
+  <link rel="stylesheet" href="css/index.css">
   
   <link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
-  <link rel="stylesheet" href="css/jquery.mobile-1.3.1.min.css">
+  <!--<link rel="stylesheet" href="css/jquery.mobile-1.3.1.min.css"> -->
   
   <!-- Extra Codiqa features -->
   <link rel="stylesheet" href="css/codiqa.ext.css">  
   
   <!-- jQuery and jQuery Mobile -->
   <script src="js/jquery-1.9.1.min.js"></script>
-  <script src="js/jquery.mobile-1.3.1.min.js"></script>
+  <!-- <script src="js/jquery.mobile-1.3.1.min.js"></script> -->
   <script src="js/jquery-ui-1.10.3.custom.js"></script>
 
   <!-- Extra Codiqa features -->
@@ -28,87 +31,85 @@
 
 </head>
 <body>
-  <!-- Home -->
-  <div data-role="page" id="page1">
-    <div data-theme="a" data-role="header">
-        <!-- <a data-role="button" href="#" data-icon="refresh" data-iconpos="left"
-        class="ui-btn-right">Refersh
+<div id="container" class='smooth full-height'>
+  <div class="topcoat-navigation-bar on-top header">
+    <div class="topcoat-navigation-bar__item left quarter">
+      <!-- <a id="btnBack" class="topcoat-icon-button--quiet back-button" href="javascript:step_back_new()">
+        <span class="topcoat-icon topcoat-icon--back"></span>
       </a> -->
-      <a data-role="button" href="javascript:current_step();" data-icon="refresh" data-iconpos="notext"
-      class="ui-btn-right">
-      </a>
-      <a id="btnBack" data-role="button" data-icon="arrow-l" data-iconpos="notext"
-      class="ui-btn-left" href="javascript:step_back();">    
-      </a>
-  <h3 style="overflow: visible;">
-    <img src='img/logo_big.png' style="height: 19px; padding-top:2px; padding-right: 5px;"/> SpendTracker
-  </h3>
-  <div data-role="navbar" data-iconpos="top" id="navbar">
-    <ul>
-      <li>
-        <a href="#" data-transition="fade" data-theme="" data-icon="" class="my-navbarbtn" id="n_contracted">
-          Contracted <div id="n_contracted_div"></div>
-        </a>
-      </li>
-      <li>
-        <a href="#" data-transition="fade" data-theme="" data-icon="" class="my-navbarbtn" id="n_approved">
-          Approved <div id="n_approved_div"></div>
-        </a>
-      </li>
-      <li>
-        <a href="#" data-transition="fade" data-theme="" data-icon="" class="my-navbarbtn" id="n_adhoc">
-          Adhoc <div id="n_adhoc_div"></div>
-        </a>
-      </li>
-    </ul>
+            <!-- <a class="topcoat-icon-button--quiet">
+              <span class="topcoat-icon topcoat-icon--menu-stack"></span>
+            </a> -->
+    </div>
+    <div class="topcoat-navigation-bar__item center half">
+      <h1 class="topcoat-navigation-bar__title">
+      <img src="img/bsm_logo_glow.png" style="height: 19px; padding-top:2px; padding-right: 5px;">
+      Spend Tracker</h1>
+    </div>
+    <div class="topcoat-navigation-bar__item right quarter">
+      <span id="hamburger">
+        <!-- <a class="topcoat-icon-button--quiet" id="hamburger-btn">
+          <span class="topcoat-icon topcoat-icon--menu-stack"></span>
+        </a> -->
+      </span>
+    </div>
   </div>
-</div>
-<div id="searchbox">
-  <input type="search" name="search" id="search-basic" value="" class='txtVendor' placeholder='Vendor' />
-  <!-- <input class='txtVendor' type='search' placeholder='Search for a vendor'/> -->
-</div>
-<div data-role="content">
-  <div class='error' id='ajax_error' style="display: none;margin: 0px;font-style: italic;font-size: 14px;color: rgb(146,146,146);padding: 20px;"> 
-    Sorry, there was a temporary error. Please try again in a minute.<br/>-vidya.sagar@bs-shipmanagement.com
+  <div class="topcoat-button-bar navbar" id="navbar" > <!---->
+    <div class="topcoat-button-bar__item ">
+      <button class="topcoat-button-bar__button navbar-button" id="n_contracted">Contracted <div id="n_contracted_div"></div></button>
+    </div>
+    <div class="topcoat-button-bar__item ">
+      <button class="topcoat-button-bar__button navbar-button" id="n_approved">Approved <div id="n_approved_div"></div></button>
+    </div>
+    <div class="topcoat-button-bar__item ">
+      <button class="topcoat-button-bar__button navbar-button" id="n_adhoc">Adhoc <div id="n_adhoc_div"></div></button>
+    </div>
   </div>
-  <div class='login'>
-    <div class='login_title'><h3>Please login to track Vendor Spend.</h3></div>
-    <form id='login_form'>
-      <div class="input-group">
-        <div class="input-row">
-          <label>BSM Email</label>
-          <input type="text" placeholder="user@bs-shipmanagement.com" id='login_email'>
+  <div id="contentLayer"></div>
+  <div id="searchbox">
+    <input type="search" name="search" id="search-basic" value="" class='txtVendor topcoat-search-input' placeholder='Vendor' />
+  </div>
+  <div id="content" class='content on-top scroller'>
+    <div class='error' id='ajax_error' style="display: none;margin: 0px;font-style: italic;font-size: 14px;color: rgb(146,146,146);padding: 20px;"> 
+      Sorry, there was a temporary error. Please try again in a minute.<br/>-vidya.sagar@bs-shipmanagement.com
+    </div>
+    <div class='login'>
+      <div class='login_title'><h3>Please login to Spend Tracker.</h3></div>
+      <form id='login_form'>
+        <div class="input-group">
+          <div class="input-row">
+            <label>BSM Email</label>
+            <input class="topcoat-text-input" type="text" placeholder="user@bs-shipmanagement.com" id='login_email'>
+          </div>
+          <div class="input-row">
+            <label>Password</label>
+            <input class="topcoat-text-input" type="password" id='login_password'>
+          </div>
         </div>
-        <div class="input-row">
-          <label>Password</label>
-          <input type="password" id='login_password'>
-        </div>
-      </div>
-      <!-- <a class="button-main button-block" id='login_submit'>Sign In</a> -->
-      <input type="submit" value="Sign In" id='login_submit'/>
-    </form>
+        <!-- <a class="button-main button-block" id='login_submit'>Sign In</a> -->
+        <!-- <input class="topcoat-button" type="submit" value="Sign In" id='login_submit'/> -->
+        <button class="topcoat-button--cta" type="submit">Sign In</button>
+      </form>
+    </div>
+    <div id="index_content" style="display: block;"></div>
+    <div id='view_title'></div>
+    <div id='contracted' class="my-navbar-content"></div>
+    <div id='approved' class="my-navbar-content"></div>
+    <div id='adhoc' class="my-navbar-content"></div>
+    <div id='vendor-invoices' class="my-navbar-content"></div>
+    <div id='searched-vendor' class="my-navbar-content"></div>
+    <div class='spinner_index'>
+      <img src="img/spinner.gif" width="20px" height="20px" style="display:block;margin:auto;"/>
+    </div>
   </div>
-  <div id="index_content" style="display: block;"></div>
-  <div id='view_title'></div>
-  <div id='contracted' class="my-navbar-content"></div>
-  <div id='approved' class="my-navbar-content"></div>
-  <div id='adhoc' class="my-navbar-content"></div>
-  <div id='vendor-invoices' class="my-navbar-content"></div>
-  <div id='searched-vendor' class="my-navbar-content"></div>
-  <div id='vendor-turnover-report' class="my-navbar-content"></div>
 </div>
-<div class='spinner_index'>
-  <img src="img/spinner.gif" width="20px" height="20px" style="display:block;margin:auto;"/>
-</div>
-</div>
-<form id="invisible_form" 
-action="https://www.getvesseltracker.com/sdc_vendor_spend_dev/pdf_export/examples/vendor_turnover_report.php" method="post" target="_blank">
-<input id="new_window_parameter_year" name="parameter_year" type="hidden" value="default">
-<input id="new_window_parameter_sdcCode" name="parameter_sdcCode" type="hidden" value="default">
-<input id="new_window_parameter_ownerid" name="parameter_ownerid" type="hidden" value="default">
-<input id="new_window_parameter_vesselobjectid" name="parameter_vesselobjectid" type="hidden" value="default">
-<input id="new_window_parameter_fromdate" name="parameter_fromdate" type="hidden" value="default">
-<input id="new_window_parameter_todate" name="parameter_todate" type="hidden" value="default">
+<form id="invisible_form" action="https://www.getvesseltracker.com/sdc_vendor_spend_dev/pdf_export/examples/vendor_turnover_report.php" method="post" target="_blank">
+  <input id="new_window_parameter_year" name="parameter_year" type="hidden" value="default">
+  <input id="new_window_parameter_sdcCode" name="parameter_sdcCode" type="hidden" value="default">
+  <input id="new_window_parameter_ownerid" name="parameter_ownerid" type="hidden" value="default">
+  <input id="new_window_parameter_vesselobjectid" name="parameter_vesselobjectid" type="hidden" value="default">
+  <input id="new_window_parameter_fromdate" name="parameter_fromdate" type="hidden" value="default">
+  <input id="new_window_parameter_todate" name="parameter_todate" type="hidden" value="default">
 </form>
 <script type="text/javascript" src="phonegap.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
