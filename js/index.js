@@ -612,8 +612,7 @@ function show_years() {
         $('#index_content').show();
         // $('#listview').listview();
     }
-    if ($.jStorage.get("push_registered") == null)
-        register_push_service();
+    
 }
 
 // show_years();
@@ -676,6 +675,8 @@ $('#login_form').submit(function(){
                 $('.login').hide();
                 $.jStorage.set("pal_user_id", username);
                 show_years();
+                if ($.jStorage.get("push_registered") == null)
+                    register_push_service();
             // location.reload();
             } else {
                 login_failure();
