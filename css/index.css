@@ -10,6 +10,7 @@
 .topcoat-text-input,.topcoat-search-input{
 	width: 100%;
 	margin: 2px;
+	min-height: 3rem;
 }
 
 .navbar, .navbar-button{

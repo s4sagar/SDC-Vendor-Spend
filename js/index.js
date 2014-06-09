@@ -161,7 +161,7 @@ function route(event) {
 }
 
 function step_back_new () {
-    // window.history.back();
+    window.history.back();
 }
 
 var step_back = function() {};
@@ -622,6 +622,7 @@ function show_years() {
 var pal_user_id,push_registered;
 
 $(document).ready(function() {
+    $('#btnAlert').hide();
     try{
         pal_user_id = $.jStorage.get("pal_user_id");
         // $.jStorage.set("pal_user_id", '');
@@ -635,6 +636,7 @@ $(document).ready(function() {
     } else {
         $('.login').hide();
         show_years();
+        $('#btnAlert').show();
     }
     
 });

@@ -114,3 +114,9 @@
   outline: 0;
 }
 
+.topcoat-icon--back {
+    background: url("../img/back_dark.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
