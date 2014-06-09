@@ -128,9 +128,47 @@ function hide_all() {
     $('#alert_content').hide();
 }
 
+$(window).on('hashchange', route);
+$(window).on('load', route_to_dashboard);
+
+function route_to_dashboard (event) {
+    window.location.replace("#");
+}
+
+function route(event) {
+    // $('body').scrollTop(0);
+    $('body, html').animate({scrollTop : 0}, 0);
+    var page,
+        hash = window.location.hash.split('/')[0];
+
+    //window.location.href = "#show_top_vendors_by_turnover/" + year;
+    if (hash === "#show_top_vendors_by_turnover") {
+        show_top_vendors_by_turnover(window.location.hash.split('/')[1]);
+    } else if (hash === "#show_top_invoices_by_vendor_year") {
+        show_top_invoices_by_vendor_year(window.location.hash.split('/')[1], window.location.hash.split('/')[2]);
+    } else if (hash === "#logout") {
+        // hide_all();
+        // $('#hamburger').hide();
+        $.jStorage.set("pal_user_name", null);
+        // $('.login').show();
+        location.reload(true);
+    }
+    else {
+        show_years();
+    }
+    // slider.slidePage($(page));
+
+}
+
+function step_back_new () {
+    // window.history.back();
+}
+
 var step_back = function() {};
 
 var current_step = function() {};
+
+var title_text_prev;
 
 // Nijo Starts!
 var sdcs = new Array('BSMBE', 'BSMCN', 'BSMCY', 'BSMDE', 'BSMGR', 'BSMHK', 'BSMIN', 'BSMIM', 'BSMPL', 'BSMJP', 'BSMSG', 'BSMUK', 'ALL');
@@ -149,9 +187,27 @@ function show_top_vendors_by_turnover(year) {
     current_step = function(){
         show_top_vendors_by_turnover(year);
     };
+
     var owner = selected_owner_id;
     var vessel = selected_vessel_id;
     var sdc = $('#cmbSDC').val();
+
+    if($('#contracted').children().length>0){
+        var title_text = 'Highest Turnover Vendors in ' + year;
+        if (sdc) title_text += ' and ' + sdc + ' SDC';
+        if (owner) title_text += ' for the owner ' + owner;
+        if (vessel) title_text += ' for vessel ' + selected_vessel_name;
+        if(title_text==title_text_prev)
+        {
+            $('#btnBack').show();
+            $('#view_title').html( title_text);
+            $('#navbar').show();
+            $('#view_title').show();
+            $('#searchbox').show();
+            $('#n_contracted').click();
+            return;
+        }
+    }
     
     req = $.ajax({
         url: 'https://www.getvesseltracker.com/sdc_vendor_spend_prod/get_top_vendors.php?year=' + year + '&sdcCode=' + sdc + '&ownerid='+owner 
@@ -165,9 +221,9 @@ function show_top_vendors_by_turnover(year) {
             // var results = JSON.parse(response);
             var results = response;
 
-            var results_div_con = "<ul data-role='listview' data-divider-theme='b' data-inset='true' class='listview'>";
-            var results_div_app = "<ul data-role='listview' data-divider-theme='b' data-inset='true' class='listview'>";
-            var results_div = "<ul data-role='listview' data-divider-theme='b' data-inset='true' class='listview'>";
+            var results_div_con = "<ul class='topcoat-list__container'>";
+            var results_div_app = "<ul class='topcoat-list__container'>";
+            var results_div = "<ul class='topcoat-list__container'>";
             var con_count = 0;
             var app_count = 0;
             var else_count = 0;
@@ -184,25 +240,25 @@ function show_top_vendors_by_turnover(year) {
                 if(results[i]['APPROVAL_STATUS'] == "CONTRACTED"){
                     con_sum+=parseFloat(results[i]['INVOICE_AMOUNT_USD']);
                     if(con_count >= 50) continue;
-                    results_div_con += "<li data-theme='c'><a href='javascript:show_top_invoices_by_vendor_year("+results[i]['vendor_id']+", "+year+")' id='"+results[i]['vendor_id']+"'> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
+                    results_div_con += "<li class='topcoat-list__item'><a href='#show_top_invoices_by_vendor_year/"+results[i]['vendor_id']+"/"+year+"' id='"+results[i]['vendor_id']+"'><div> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
-                    results_div_con += "<span class='my-count' style='float:right'> $"+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</a></span></li>";
+                    results_div_con += "<span class='my-count' style='float:right'> $"+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</div></a></span></li>";
                     con_count++;
                 }
                 else if(results[i]['APPROVAL_STATUS'] == "APPROVED"){
                     app_sum+=parseFloat(results[i]['INVOICE_AMOUNT_USD']);
                     if(app_count >= 50) continue;
-                    results_div_app += "<li data-theme='c'><a href='javascript:show_top_invoices_by_vendor_year("+results[i]['vendor_id']+", "+year+")' id='"+results[i]['vendor_id']+"'> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
+                    results_div_app += "<li class='topcoat-list__item'><a href='#show_top_invoices_by_vendor_year/"+results[i]['vendor_id']+"/"+year+"' id='"+results[i]['vendor_id']+"'><div> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
-                    results_div_app += "<span class='my-count' style='float:right'> $"+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</a></span></li>";
+                    results_div_app += "<span class='my-count' style='float:right'> $"+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</div></a></span></li>";
                     app_count++;
                 }
                 else {
                     else_sum+=parseFloat(results[i]['INVOICE_AMOUNT_USD']);
                     if(else_count >= 50) continue;
-                    results_div += "<li data-theme='c'><a href='javascript:show_top_invoices_by_vendor_year("+results[i]['vendor_id']+", "+year+")' id='"+results[i]['vendor_id']+"'> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
+                    results_div += "<li class='topcoat-list__item'><a href='#show_top_invoices_by_vendor_year/"+results[i]['vendor_id']+"/"+year+"' id='"+results[i]['vendor_id']+"'><div> <span class='list_text'>"+toTitleCase(results[i]['NAME'])+"</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
-                    results_div += "<span class='my-count' style='float:right'> $"+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</a></span></li>";
+                    results_div += "<span class='my-count' style='float:right'> $"+parseFloat(results[i]['INVOICE_AMOUNT_USD']).formatMoney(0, '.', ',')+"</div></a></span></li>";
                     else_count++;
                 }
             }
@@ -223,6 +279,7 @@ function show_top_vendors_by_turnover(year) {
             if (sdc) title_text += ' and ' + sdc + ' SDC';
             if (owner) title_text += ' for the owner ' + owner;
             if (vessel) title_text += ' for vessel ' + selected_vessel_name;
+            title_text_prev = title_text;
             $('#n_contracted_div').html('$' + parseFloat(con_sum).formatMoney(0, '.', ','));
             $('#n_approved_div').html('$' + parseFloat(app_sum).formatMoney(0, '.', ','));
             $('#n_adhoc_div').html('$' + parseFloat(else_sum).formatMoney(0, '.', ','));
@@ -233,7 +290,7 @@ function show_top_vendors_by_turnover(year) {
 
             // console.log(results_div_con);
 
-            $('.listview').listview();
+            // $('.listview').listview();
             $('#n_contracted').click();
 
             $(".txtVendor").autocomplete({
@@ -245,11 +302,11 @@ function show_top_vendors_by_turnover(year) {
                     results: function() {}
                 },
                 select: function( event, ui ) {
-                    var searched_vendor = "<div><ul data-role='listview' data-divider-theme='b' data-inset='true' class='listview'>";
+                    var searched_vendor = "<div><ul class='topcoat-list__container'>";
                     
-                    searched_vendor += "<li data-theme='c'><a href='javascript:show_top_invoices_by_vendor_year(" + ui.item.id + ", " + year + ")' id='" + ui.item.id + "'> <span class='list_text'>" + toTitleCase(ui.item.label) + "</span>";
+                    searched_vendor += "<li class='topcoat-list__item'><a href='#show_top_invoices_by_vendor_year/" + ui.item.id + "/" + year + "' id='" + ui.item.id + "'><div> <span class='list_text'>" + toTitleCase(ui.item.label) + "</span>";
                     // results_div += "<span class='chevron my-chevron'></span>";
-                    searched_vendor += "<span class='my-count'> $"+parseFloat(ui.item.amount).formatMoney(0, '.', ',')+"</a></span></li>";                   
+                    searched_vendor += "<span class='my-count'> $"+parseFloat(ui.item.amount).formatMoney(0, '.', ',')+"</div></a></span></li>";                   
                     
                     searched_vendor += "</ul></div>";
                     $('#contracted').hide();
@@ -257,11 +314,11 @@ function show_top_vendors_by_turnover(year) {
                     $('#adhoc').hide();
                     $('#searched-vendor').show();
                     $('#searched-vendor').html(searched_vendor);
-                    $('.listview').listview();
+                    // $('.listview').listview();
                 }
             });
-}
-});
+        }
+    });
 }
 
 function show_top_invoices_by_vendor_year(vendor_id, year) {
@@ -283,11 +340,11 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
         },
         success : function(results) {
             // var results = JSON.parse(response);
-            var results_div = "<ul data-role='listview' data-divider-theme='b' data-inset='true' class='listview'>";
+            var results_div = "<ul class='topcoat-list__container'>";
             var vendor_name;
             for(var i=0; i<results.length; i++) {
                 vendor_name = toTitleCase(results[i]['vendor_name']);
-                results_div += "<li data-theme='c'><span class='list_text'>";
+                results_div += "<li class='topcoat-list__item'><span class='list_text'>";
                 if (results[i]['TITLE'])
                     results_div += "<div class='sub_text vessel_name'> <span class='details_title'><b>" + toTitleCase(results[i]['TITLE']) + "</b></span></div>"
                 // results_div += "<div class='sub_text vessel_name'> <span class='details_title'>Vendor: </span><b>" + toTitleCase(results[i]['vendor_name']) + "</b></div>";
@@ -326,7 +383,7 @@ function show_top_invoices_by_vendor_year(vendor_id, year) {
             // if($('#approved').is(":visible")) $('#approved').html(results_div);
             // if($('#adhoc').is(":visible")) $('#adhoc').html(results_div);
 
-            $('.listview').listview();
+            // $('.listview').listview();
 
             // $('#approved').html(results_div);
             // $('#adhoc').html(results_div);
@@ -428,13 +485,15 @@ function show_more_filter(year) {
         return false;
     }
     var filterDiv="<div id='filterDiv' data-role='content' style='display:none;-webkit-box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);box-shadow: inset 0px -2px 10px 1px rgba(0, 0, 0, .3);'>";
-    filterDiv+="<div style='padding:10px 0px 10px 10px;'><table border='0' cellpadding='0' cellspacing='0'><tr><td style='padding-right:5px'>SDC</td>";
-    filterDiv+="<td style='padding-right:10px'><select id='cmbSDC'></select>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td style='padding-right:10px'><div><input id='txtOwner' type='search' name='search' class='search-textbox' placeholder='Owner' /></div></td></tr>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Vessel</td><td style='padding-right:10px'><div><input id='txtVesselFilter' type='search' name='search' placeholder='Vessel' /></div></td></tr>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>From Date</td><td style='padding-right:10px'><div><input id='txtFromDate' type='date' class='search-textbox' /></div></td></tr>";
-    filterDiv+="</td></tr><tr><td style='padding-right:5px'>To Date</td><td style='padding-right:10px'><div><input id='txtToDate' type='date' class='search-textbox' /></div></td></tr>";
-    filterDiv+="<tr><td colspan='2' style='text-align:right; padding-right:10px'><input id='btnShow' type='button' value='Show' onClick='show_top_vendors_by_turnover("+year+")' /></td></tr>";
+    filterDiv+="<div style='padding:10px 0px 10px 10px;'><table style='width:100%' border='0' cellpadding='0' cellspacing='0'><tr><td style='padding-right:5px'>SDC</td>";
+    filterDiv+="<td style='padding-right:10px'><select id='cmbSDC' class='topcoat-select' style='width:100%'></select>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Owner</td><td style='padding-right:10px'><div><input id='txtOwner' class='topcoat-search-input' placeholder='Owner' /></div></td></tr>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>Vessel</td><td style='padding-right:10px'><div><input id='txtVesselFilter' class='topcoat-search-input' placeholder='Vessel' /></div></td></tr>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>From Date</td><td style='padding-right:10px'><div><input id='txtFromDate' type='date' class='topcoat-text-input'  /></div></td></tr>";
+    filterDiv+="</td></tr><tr><td style='padding-right:5px'>To Date</td><td style='padding-right:10px'><div><input id='txtToDate' type='date' class='topcoat-text-input'  /></div></td></tr>";
+    filterDiv+="<tr><td colspan='2' style='text-align:right; padding-right:10px'><input id='btnShow' type='button' class='topcoat-button--cta' value='Show' onClick='show_top_vendors_by_turnover_route("+year+")' /></td></tr>";
+
+    // filterDiv+="<tr><td colspan='2' style='text-align:right; padding-right:10px'><input id='btnShow' type='button' class='topcoat-button--cta' value='Show' onClick='show_top_vendors_by_turnover("+year+")' /></td></tr>";
     // filterDiv+="<tr><td colspan='2' style='text-align:right'><input id='btnReport' type='button' value='Report' onClick='show_vendors_turnover_report("+year+")' /></td></tr>";
     filterDiv+="</table></div></div>";
 
@@ -448,45 +507,48 @@ function show_more_filter(year) {
     $('#cmbSDC').append(SDCoption);
     $('#cmbSDC').val('ALL');
     
-    $('#cmbSDC').selectmenu();
-    $('#txtOwner').textinput();
-    $('#txtVesselFilter').textinput();
-    $('#txtFromDate').textinput();
-    $('#txtToDate').textinput();
-    $('#btnShow').button();
+    // $('#cmbSDC').selectmenu();
+    // $('#txtOwner').textinput();
+    // $('#txtVesselFilter').textinput();
+    // $('#txtFromDate').textinput();
+    // $('#txtToDate').textinput();
+    // $('#btnShow').button();
     // $('#btnReport').button();
 
 
     $("#txtOwner").autocomplete({
-    source: owners_array,
-    minLength: 1,
-    matchFromStart: false,
-    messages: {
-        noResults: '',
-        results: function() {}
-    },
-    select: function( event, ui ) {
-        selected_owner_id = ui.item.ID;
-    }
-});
- $("#txtVesselFilter").autocomplete({
-    source: vessel_array,
-    minLength: 1,
-    matchFromStart: false,
-    messages: {
-        noResults: '',
-        results: function() {}
-    },
-    select: function( event, ui ) {
-        selected_vessel_id = ui.item.ID;
-        selected_vessel_name = ui.item.label;
-    }
-});
+        source: owners_array,
+        minLength: 1,
+        matchFromStart: false,
+        messages: {
+            noResults: '',
+            results: function() {}
+        },
+        select: function( event, ui ) {
+            selected_owner_id = ui.item.ID;
+        }
+    });
+    $("#txtVesselFilter").autocomplete({
+        source: vessel_array,
+        minLength: 1,
+        matchFromStart: false,
+        messages: {
+            noResults: '',
+            results: function() {}
+            },
+        select: function( event, ui ) {
+            selected_vessel_id = ui.item.ID;
+            selected_vessel_name = ui.item.label;
+            }
+    });
  $("#filterDiv").slideDown("fast");
 }
 
-function show_years() {
+function show_top_vendors_by_turnover_route (year) {
+    window.location.href = "#show_top_vendors_by_turnover/" + year;
+}
 
+function show_years() {
     hide_all();
     current_step = show_years;
     var currentTime = new Date();
@@ -506,13 +568,13 @@ function show_years() {
             $.jStorage.set("filter_owners", owners_array);
             $.jStorage.set("filter_vessels", vessel_array);
             $('.spinner_index').hide();
-            var results_div = "<ul data-role='listview' data-divider-theme='b' data-inset='true' id='listview'>";
+            var results_div = "<ul class='topcoat-list__container' id='listview'>";
             var cur_year = new Date().getFullYear();
             for(var i=0; i<3; i++) {
                // results_div += "<li><a href='javascript:show_top_vendors_by_turnover(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
-               results_div += "<li data-theme='c'><a data-transition='slide' href='javascript:show_more_filter(\""+(cur_year - i)+"\")' id='"+(cur_year - i)+"'>"+(cur_year - i);
+               results_div += "<li class='topcoat-list__item'><a data-transition='slide' href='javascript:show_more_filter(\""+(cur_year - i)+"\")' id='"+(cur_year - i)+"'><div>"+(cur_year - i);
                 // results_div += "<span class='chevron'></span>";
-                results_div += "</a></li>";
+                results_div += "</div></a></li>";
             }
             results_div += "</ul>";  
 
@@ -524,7 +586,7 @@ function show_years() {
             // $('#view_title').html('Please select a year.');
             $('#index_content').html(results_div);
             $('#index_content').show();
-            $('#listview').listview();
+            // $('#listview').listview();
 
             },
         error: function() {        
@@ -537,18 +599,18 @@ function show_years() {
         owners_array = $.jStorage.get('filter_owners');
         vessel_array = $.jStorage.get('filter_vessels');
 
-        var results_div = "<ul data-role='listview' data-divider-theme='b' data-inset='true' id='listview'>";
+        var results_div = "<ul class='topcoat-list__container' id='listview'>";
         var cur_year = new Date().getFullYear();
         for(var i=0; i<3; i++) {
            // results_div += "<li><a href='javascript:show_top_vendors_by_turnover(\""+(2013 - i)+"\")' id='"+(2013 - i)+"'>"+(2013 - i);
-           results_div += "<li data-theme='c'><a data-transition='slide' href='javascript:show_more_filter(\""+(cur_year - i)+"\")' id='"+(cur_year - i)+"'>"+(cur_year - i);
+           results_div += "<li class='topcoat-list__item'><a data-transition='slide' href='javascript:show_more_filter(\""+(cur_year - i)+"\")' id='"+(cur_year - i)+"'><div>"+(cur_year - i);
             // results_div += "<span class='chevron'></span>";
-            results_div += "</a></li>";
+            results_div += "</div></a></li>";
         }
         results_div += "</ul>";
         $('#index_content').html(results_div);
         $('#index_content').show();
-        $('#listview').listview();
+        // $('#listview').listview();
     }
     if ($.jStorage.get("push_registered") == null)
         register_push_service();
@@ -760,31 +822,6 @@ function onNotificationGCM(e) {
     }
 }
 
-$('.my-navbarbtn').click(function(){
-  $('.my-navbar-content').hide();
-  var res= '#'+$(this).attr('id'); 
-  var a = res.substring(3);
-  $('#'+a).show();
-})
-
-// <ul class='list'>
-//                 <li>
-//                   <a href="#" data-transition="slide-in">
-//                     Vendor A
-//                     <span class="chevron"></span>
-//                     <span class="count">$1470</span>
-//                   </a>
-//                 </li>
-//                 <li>
-//                   <a href="#" data-transition="slide-in">
-//                     Vendor B
-//                     <span class="chevron"></span>
-//                     <span class="count">$1490</span>
-//                   </a>
-//                 </li>
-//               </ul>
-
-
 function show_vendors_turnover_report(year) {
     hide_all();
     selected_from_date = $('#txtFromDate').val();
@@ -963,6 +1000,7 @@ function export_pdf(year) {
   // });
 }
 
+<<<<<<< HEAD
 function showalerts() {
     if($("#index_content").css("display") == "block") {
         $('#index_content').hide();
@@ -972,3 +1010,27 @@ function showalerts() {
         $('#alert_content').hide();
     }
 }
+=======
+$('#n_contracted').click(function  () {
+    $('#contracted').show();
+    $('#approved').hide();
+    $('#adhoc').hide();
+    $('#searched-vendor').hide();
+});
+
+
+$('#n_approved').click(function  () {
+    $('#contracted').hide();
+    $('#approved').show();
+    $('#adhoc').hide();
+    $('#searched-vendor').hide();
+});
+
+
+$('#n_adhoc').click(function  () {
+    $('#contracted').hide();
+    $('#approved').hide();
+    $('#adhoc').show();
+    $('#searched-vendor').hide();
+});
+>>>>>>> d8172d1b3bb96a87a1d26d986e86aed603689114

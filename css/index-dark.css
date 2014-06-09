@@ -1,0 +1,20 @@
+body{
+	color: #c6c8c8;
+}
+div{
+	overflow: hidden;
+}
+a{
+	text-decoration: none;
+	color: #c6c8c8;
+}
+
+.topcoat-navigation-bar{
+	height: 3.95rem;
+	background-color: #3e3c3d;
+
+}
+
+.topcoat-navigation-bar__title{
+	color: #c6c8c8;
+}
