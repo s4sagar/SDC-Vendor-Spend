@@ -125,7 +125,8 @@ function hide_all() {
     $('#searched-vendor').hide();
     $('#vendor-turnover-report').hide();
     $('#ajax_error').hide();
-    $('#alert_content').hide();
+    $('#alert-content').hide();
+    $('#alert-content-detail').hide();
 }
 
 $(window).on('hashchange', route);
@@ -152,6 +153,12 @@ function route(event) {
         $.jStorage.set("pal_user_name", null);
         // $('.login').show();
         location.reload(true);
+    }
+    else if(hash === "#showAlerts"){
+        showAlerts();
+    }
+    else if(hash === "#alertDetail"){
+        alertDetail();
     }
     else {
         show_years();
@@ -958,18 +965,64 @@ $('#n_adhoc').click(function  () {
     $('#searched-vendor').hide();
 });
 
-function showalerts() {
-    if($("#index_content").css("display") == "block") {
-        $('#index_content').hide();
-        $('#alert_content').show();
-        show_alerts();
-    } else {
-        $('#index_content').show();
-        $('#alert_content').hide();
+var allAlerts;
+var alertDetailInvoiceNo;
+
+function showAlerts() {
+    hide_all();
+    req = $.ajax({
+        url: 'https://getvesseltracker.com/sdc_vendor_spend_dev/alert_invoice.php',
+        beforeSend: function() {
+            $(".spinner_index").css('display','inline');
+            $(".spinner_index").center();
+        },
+        success : function(results) {
+            allAlerts = results;
+            // var results = JSON.parse(response);
+            var results_div = "<ul class='topcoat-list__container'>";
+            var vendor_name;
+            for(var i=0; i<results.length; i++) {
+                results_div += "<li class='topcoat-list__item'><span class='list_text'>";
+                if (results[i]['message'])
+                    results_div += '<div onclick="alertDetailSet(\''+results[i]['vendor_invoice_no']+'\')">' + toTitleCase(results[i]['message']) + '</div>'
+                // results_array.push('<a class="footer-button" id="cscemail" href=\"'+cscemail+'\">');
+                results_div += "</li>"
+            }
+            results_div += "</ul>";
+            $('.spinner_index').hide();
+            
+            $('#btnBack').show();
+            $('#alert-content').html(results_div);
+            $('#alert-content').show();
+        }
+    });
+}
+
+function alertDetailSet (invoice_no) {
+    alertDetailInvoiceNo = invoice_no;
+    window.location.hash = '#alertDetail';
+}
+var cur_alert ;
+function alertDetail () {
+    if(alertDetailInvoiceNo){
+        hide_all();
+        cur_alert = $.grep(allAlerts , function(e){ return e.vendor_invoice_no == alertDetailInvoiceNo; });
+
+        var results_div = "";
+
+        var results_div = "<ul class='topcoat-list__container'>";        
+        results_div += "<li class='topcoat-list__item'><span class='list_text'>";
+        results_div += "<div class='sub_text vessel_name'> <span class='details_title'>Vessel: </span><b>" + toTitleCase(cur_alert[0]['vessel_name']) + "</b></div>";
+        results_div += "<div class='sub_text invoice_no'> <span class='details_title'>Invoice No: </span><b>" + toTitleCase(cur_alert[0]['vendor_invoice_no']) + "</b></div></span>";
+        results_div += "<div class='sub_text invoice_register_date'> <span class='details_title'>Registration Date: </span><b>" + cur_alert[0]['vendor_invoice_date'].split('t',1)[0] + "</b></div></span>";
+        results_div += "<div class='sub_text invoice_paid_date'> <span class='details_title'>Pay Due Date: </span><b>" + cur_alert[0]['pay_due_date'].split('t',1)[0] + "</b></div></span>";
+        // results_div += "<span class='chevron'></span>";
+        results_div += "<span class='my-count'>$"+parseFloat(cur_alert[0]['invoice_amount']).formatMoney(0, '.', ',')+"</span></a></li>";
+        
+        results_div += "</ul>";
+        $('#alert-content-detail').html(results_div);
+        $('#alert-content-detail').show();
+        $('#btnBack').show();
+        
     }
 }
-
-function show_alerts() {
-
-}
-

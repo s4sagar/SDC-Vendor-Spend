@@ -44,14 +44,15 @@
     </div>
     <div class="topcoat-navigation-bar__item center half">
       <h1 class="topcoat-navigation-bar__title">
-      <img src="img/bsm_logo_glow.png" style="height: 19px; padding-top:2px; padding-right: 5px;">
-      Spend Tracker</h1>
+      <img src="img/bsm_logo_glow.png" style="height: 19px; padding-top:2px; padding-right: 5px;">Spend Tracker</h1>
     </div>
     <div class="topcoat-navigation-bar__item right quarter">
       <span id="hamburger">
-        <div id="btnAlert" class="topcoat-icon-button--quiet">
-          <span class="icon-bell2" onclick="showalerts()"></span>
-        </div>
+        <a href="#showAlerts">
+          <div id="btnAlert" class="topcoat-icon-button--quiet">
+              <span class="icon-bell2"></span>
+          </div>
+        </a>
         <!-- <a class="topcoat-icon-button--quiet" id="hamburger-btn">
           <span class="topcoat-icon topcoat-icon--menu-stack"></span>
         </a> -->
@@ -102,6 +103,8 @@
     <div id='adhoc' class="my-navbar-content"></div>
     <div id='vendor-invoices' class="my-navbar-content"></div>
     <div id='searched-vendor' class="my-navbar-content"></div>
+    <div id='alert-content' class="my-navbar-content"></div>
+    <div id='alert-content-detail' class="my-navbar-content"></div>
     <div class='spinner_index'>
       <img src="img/spinner.gif" width="20px" height="20px" style="display:block;margin:auto;"/>
     </div>
