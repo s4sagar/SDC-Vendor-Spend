@@ -619,7 +619,7 @@ function show_years() {
         $('#index_content').show();
         // $('#listview').listview();
     }
-    
+    setAlerts();
 }
 
 // show_years();
@@ -968,8 +968,7 @@ $('#n_adhoc').click(function  () {
 var allAlerts;
 var alertDetailInvoiceNo;
 
-function showAlerts() {
-    hide_all();
+function setAlerts(){
     req = $.ajax({
         url: 'https://getvesseltracker.com/sdc_vendor_spend_dev/alert_invoice.php',
         beforeSend: function() {
@@ -989,13 +988,18 @@ function showAlerts() {
                 results_div += "</li>"
             }
             results_div += "</ul>";
-            $('.spinner_index').hide();
-            
-            $('#btnBack').show();
+            $('.spinner_index').hide();            
             $('#alert-content').html(results_div);
-            $('#alert-content').show();
+            $('#alert_count').html(allAlerts.length);
         }
     });
+}
+
+function showAlerts() {
+    hide_all();
+    
+    $('#btnBack').show();
+    $('#alert-content').show();
 }
 
 function alertDetailSet (invoice_no) {
