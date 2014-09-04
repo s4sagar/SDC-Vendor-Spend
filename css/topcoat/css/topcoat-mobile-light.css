@@ -3835,3 +3835,55 @@ Everything below this line should be calculated using the variables above. This 
     - text
     - input
 */
+
+
+
+input[type=date] {
+  -webkit-appearance: none;
+  /*line-height: 2.313rem !important;*/
+  font-size: 12px;
+  letter-spacing: 0;
+  padding: 0 0.563rem;
+  border: 1px solid #9daca9;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: inset 0 1px rgba(0,0,0,0.1);
+  color: #454545;
+  vertical-align: top;
+  width: 100%;
+}
+
+input::-webkit-datetime-edit {
+  -webkit-appearance: none;
+}
+
+input::-webkit-datetime-edit-fields-wrapper {
+  -webkit-appearance: none;
+}
+
+input::-webkit-datetime-edit-text {
+  -webkit-appearance: none;
+  color: #ccc;
+}
+
+input::-webkit-datetime-edit-day-field,
+input::-webkit-datetime-edit-month-field,
+input::-webkit-datetime-edit-year-field {
+  -webkit-appearance: none;
+  color: #454545;
+  text-shadow: 0 1px #fff;
+}
+
+input::-webkit-clear-button {
+  -webkit-appearance: none;
+}
+
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  border-radius: 1px;
+}
+
+input::-webkit-calendar-picker-indicator,
+#picker {
+  -webkit-appearance: none;
+}
